@@ -55,7 +55,15 @@ const placeholderParties = [
   },
 ];
 
-const placeholderFilters = ["All", "Game", "Rule", "Season", "Favorites", "Recently updated"];
+const placeholderFilters = [
+  "All",
+  "Game",
+  "Rule",
+  "Season",
+  "Tags",
+  "Favorites",
+  "Recently updated",
+];
 
 function PartiesPage() {
   return (
