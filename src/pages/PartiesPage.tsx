@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const placeholderParties = [
   {
     name: "Dragonite Balance",
@@ -16,6 +18,7 @@ const placeholderParties = [
     winRate: "62%",
     updatedAt: "Updated recently",
     favorite: true,
+    detailPath: "/parties/dragonite-balance",
   },
   {
     name: "Rain Offense",
@@ -200,6 +203,15 @@ function PartiesPage() {
                 </div>
                 <p className="text-notebook-muted">{party.updatedAt}</p>
               </div>
+
+              {party.detailPath ? (
+                <Link
+                  to={party.detailPath}
+                  className="mt-5 inline-flex items-center justify-center rounded-xl border border-notebook-accent px-4 py-2 text-sm font-semibold text-notebook-accent transition hover:bg-notebook-accent hover:text-white"
+                >
+                  Open party
+                </Link>
+              ) : null}
             </article>
           ))}
         </div>
