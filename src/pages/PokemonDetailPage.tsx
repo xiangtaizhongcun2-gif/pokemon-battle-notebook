@@ -12,6 +12,24 @@ const pokemonDetail = {
   relatedNotes: "Related parties, battle logs, and research notes will appear here.",
 };
 
+const typeMatchups = {
+  weaknesses: [
+    { type: "Ice", multiplier: "×4" },
+    { type: "Rock", multiplier: "×2" },
+    { type: "Dragon", multiplier: "×2" },
+    { type: "Fairy", multiplier: "×2" },
+  ],
+  resistances: [
+    { type: "Fire", multiplier: "×0.5" },
+    { type: "Water", multiplier: "×0.5" },
+    { type: "Fighting", multiplier: "×0.5" },
+    { type: "Bug", multiplier: "×0.5" },
+    { type: "Grass", multiplier: "×0.25" },
+  ],
+  immunities: [{ type: "Ground", multiplier: "×0" }],
+  note: "Ice-type attacks are especially dangerous. Preserve Multiscale when possible.",
+};
+
 function PokemonDetailPage() {
   return (
     <div className="space-y-8">
@@ -42,13 +60,13 @@ function PokemonDetailPage() {
 
       <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_20rem] xl:items-start">
         <div className="space-y-8">
-          <section aria-labelledby="matchup-overview-title" className="space-y-4">
+          <section aria-labelledby="type-matchup-title" className="space-y-4">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-notebook-accent">
-                Matchup overview
+                Type Matchup
               </p>
-              <h3 id="matchup-overview-title" className="mt-2 text-2xl font-semibold tracking-tight">
-                Type matchup placeholders
+              <h3 id="type-matchup-title" className="mt-2 text-2xl font-semibold tracking-tight">
+                Damage multiplier placeholders
               </h3>
             </div>
 
@@ -57,14 +75,17 @@ function PokemonDetailPage() {
                 <p className="text-sm font-bold uppercase tracking-[0.16em] text-notebook-accent">
                   Weakness
                 </p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {pokemonDetail.weaknesses.map((type) => (
-                    <span
-                      key={type}
-                      className="rounded-full border border-notebook-border bg-notebook-background px-3 py-1 text-xs font-semibold text-notebook-muted"
+                <div className="mt-4 space-y-2">
+                  {typeMatchups.weaknesses.map((matchup) => (
+                    <div
+                      key={matchup.type}
+                      className="flex items-center justify-between gap-4 rounded-xl border border-notebook-border bg-notebook-background px-3 py-2"
                     >
-                      {type}
-                    </span>
+                      <span className="text-sm font-medium text-notebook-text">{matchup.type}</span>
+                      <span className="text-sm font-semibold text-notebook-accent">
+                        {matchup.multiplier}
+                      </span>
+                    </div>
                   ))}
                 </div>
               </article>
@@ -73,14 +94,17 @@ function PokemonDetailPage() {
                 <p className="text-sm font-bold uppercase tracking-[0.16em] text-notebook-accent">
                   Resistance
                 </p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {pokemonDetail.resistances.map((type) => (
-                    <span
-                      key={type}
-                      className="rounded-full border border-notebook-border bg-notebook-background px-3 py-1 text-xs font-semibold text-notebook-muted"
+                <div className="mt-4 space-y-2">
+                  {typeMatchups.resistances.map((matchup) => (
+                    <div
+                      key={matchup.type}
+                      className="flex items-center justify-between gap-4 rounded-xl border border-notebook-border bg-notebook-background px-3 py-2"
                     >
-                      {type}
-                    </span>
+                      <span className="text-sm font-medium text-notebook-text">{matchup.type}</span>
+                      <span className="text-sm font-semibold text-notebook-accent">
+                        {matchup.multiplier}
+                      </span>
+                    </div>
                   ))}
                 </div>
               </article>
@@ -89,17 +113,27 @@ function PokemonDetailPage() {
                 <p className="text-sm font-bold uppercase tracking-[0.16em] text-notebook-accent">
                   Immunity
                 </p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {pokemonDetail.immunities.map((type) => (
-                    <span
-                      key={type}
-                      className="rounded-full border border-notebook-border bg-notebook-background px-3 py-1 text-xs font-semibold text-notebook-muted"
+                <div className="mt-4 space-y-2">
+                  {typeMatchups.immunities.map((matchup) => (
+                    <div
+                      key={matchup.type}
+                      className="flex items-center justify-between gap-4 rounded-xl border border-notebook-border bg-notebook-background px-3 py-2"
                     >
-                      {type}
-                    </span>
+                      <span className="text-sm font-medium text-notebook-text">{matchup.type}</span>
+                      <span className="text-sm font-semibold text-notebook-accent">
+                        {matchup.multiplier}
+                      </span>
+                    </div>
                   ))}
                 </div>
               </article>
+            </div>
+
+            <div className="rounded-2xl border border-notebook-border bg-notebook-background px-5 py-4">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-notebook-accent">
+                Type matchup note
+              </p>
+              <p className="mt-2 text-sm leading-6 text-notebook-muted">{typeMatchups.note}</p>
             </div>
           </section>
 
@@ -132,7 +166,10 @@ function PokemonDetailPage() {
           </section>
         </div>
 
-        <aside aria-labelledby="quick-view-title" className="rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm">
+        <aside
+          aria-labelledby="quick-view-title"
+          className="rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm"
+        >
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-notebook-accent">
             Quick View
           </p>
