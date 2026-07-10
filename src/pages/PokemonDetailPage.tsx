@@ -5,6 +5,8 @@ const pokemonDetail = {
   weaknesses: ["Ice", "Rock", "Dragon", "Fairy"],
   resistances: ["Fire", "Water", "Grass", "Fighting", "Bug"],
   immunities: ["Ground"],
+  keyMemo: "Check Ice-type coverage and preserve Multiscale when possible.",
+  buildSummary: "Setup attacker with flexible item and move options.",
   battleNotes: "Write matchup notes, common moves, and important battle observations here.",
   buildNotes: "Write item, ability, nature, EV spread, and move ideas here.",
   relatedNotes: "Related parties, battle logs, and research notes will appear here.",
@@ -38,94 +40,187 @@ function PokemonDetailPage() {
         </div>
       </section>
 
-      <section aria-labelledby="matchup-overview-title" className="space-y-4">
-        <div>
+      <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_20rem] xl:items-start">
+        <div className="space-y-8">
+          <section aria-labelledby="matchup-overview-title" className="space-y-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-notebook-accent">
+                Matchup overview
+              </p>
+              <h3 id="matchup-overview-title" className="mt-2 text-2xl font-semibold tracking-tight">
+                Type matchup placeholders
+              </h3>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-3">
+              <article className="rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm">
+                <p className="text-sm font-bold uppercase tracking-[0.16em] text-notebook-accent">
+                  Weakness
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {pokemonDetail.weaknesses.map((type) => (
+                    <span
+                      key={type}
+                      className="rounded-full border border-notebook-border bg-notebook-background px-3 py-1 text-xs font-semibold text-notebook-muted"
+                    >
+                      {type}
+                    </span>
+                  ))}
+                </div>
+              </article>
+
+              <article className="rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm">
+                <p className="text-sm font-bold uppercase tracking-[0.16em] text-notebook-accent">
+                  Resistance
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {pokemonDetail.resistances.map((type) => (
+                    <span
+                      key={type}
+                      className="rounded-full border border-notebook-border bg-notebook-background px-3 py-1 text-xs font-semibold text-notebook-muted"
+                    >
+                      {type}
+                    </span>
+                  ))}
+                </div>
+              </article>
+
+              <article className="rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm">
+                <p className="text-sm font-bold uppercase tracking-[0.16em] text-notebook-accent">
+                  Immunity
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {pokemonDetail.immunities.map((type) => (
+                    <span
+                      key={type}
+                      className="rounded-full border border-notebook-border bg-notebook-background px-3 py-1 text-xs font-semibold text-notebook-muted"
+                    >
+                      {type}
+                    </span>
+                  ))}
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section aria-labelledby="detail-notes-title" className="space-y-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-notebook-accent">
+                Notes
+              </p>
+              <h3 id="detail-notes-title" className="mt-2 text-2xl font-semibold tracking-tight">
+                Battle knowledge placeholders
+              </h3>
+            </div>
+
+            <div className="grid gap-4 lg:grid-cols-3">
+              <article className="rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm">
+                <p className="text-base font-semibold text-notebook-text">Battle notes</p>
+                <p className="mt-3 text-sm leading-6 text-notebook-muted">{pokemonDetail.battleNotes}</p>
+              </article>
+
+              <article className="rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm">
+                <p className="text-base font-semibold text-notebook-text">Build notes</p>
+                <p className="mt-3 text-sm leading-6 text-notebook-muted">{pokemonDetail.buildNotes}</p>
+              </article>
+
+              <article className="rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm">
+                <p className="text-base font-semibold text-notebook-text">Related notes</p>
+                <p className="mt-3 text-sm leading-6 text-notebook-muted">{pokemonDetail.relatedNotes}</p>
+              </article>
+            </div>
+          </section>
+        </div>
+
+        <aside aria-labelledby="quick-view-title" className="rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-notebook-accent">
-            Matchup overview
+            Quick View
           </p>
-          <h3 id="matchup-overview-title" className="mt-2 text-2xl font-semibold tracking-tight">
-            Type matchup placeholders
+          <h3 id="quick-view-title" className="mt-2 text-xl font-semibold tracking-tight">
+            At-a-glance notes
           </h3>
-        </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
-          <article className="rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm">
-            <p className="text-sm font-bold uppercase tracking-[0.16em] text-notebook-accent">
-              Weakness
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {pokemonDetail.weaknesses.map((type) => (
-                <span
-                  key={type}
-                  className="rounded-full border border-notebook-border bg-notebook-background px-3 py-1 text-xs font-semibold text-notebook-muted"
-                >
-                  {type}
-                </span>
-              ))}
+          <div className="mt-5 space-y-5">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-notebook-accent">
+                Type
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {pokemonDetail.types.map((type) => (
+                  <span
+                    key={type}
+                    className="rounded-full border border-notebook-border bg-notebook-background px-3 py-1 text-xs font-semibold text-notebook-muted"
+                  >
+                    {type}
+                  </span>
+                ))}
+              </div>
             </div>
-          </article>
 
-          <article className="rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm">
-            <p className="text-sm font-bold uppercase tracking-[0.16em] text-notebook-accent">
-              Resistance
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {pokemonDetail.resistances.map((type) => (
-                <span
-                  key={type}
-                  className="rounded-full border border-notebook-border bg-notebook-background px-3 py-1 text-xs font-semibold text-notebook-muted"
-                >
-                  {type}
-                </span>
-              ))}
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-notebook-accent">
+                Weakness
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {pokemonDetail.weaknesses.map((type) => (
+                  <span
+                    key={type}
+                    className="rounded-full border border-notebook-border bg-notebook-background px-3 py-1 text-xs font-semibold text-notebook-muted"
+                  >
+                    {type}
+                  </span>
+                ))}
+              </div>
             </div>
-          </article>
 
-          <article className="rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm">
-            <p className="text-sm font-bold uppercase tracking-[0.16em] text-notebook-accent">
-              Immunity
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {pokemonDetail.immunities.map((type) => (
-                <span
-                  key={type}
-                  className="rounded-full border border-notebook-border bg-notebook-background px-3 py-1 text-xs font-semibold text-notebook-muted"
-                >
-                  {type}
-                </span>
-              ))}
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-notebook-accent">
+                Resistance
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {pokemonDetail.resistances.map((type) => (
+                  <span
+                    key={type}
+                    className="rounded-full border border-notebook-border bg-notebook-background px-3 py-1 text-xs font-semibold text-notebook-muted"
+                  >
+                    {type}
+                  </span>
+                ))}
+              </div>
             </div>
-          </article>
-        </div>
-      </section>
 
-      <section aria-labelledby="detail-notes-title" className="space-y-4">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-notebook-accent">
-            Notes
-          </p>
-          <h3 id="detail-notes-title" className="mt-2 text-2xl font-semibold tracking-tight">
-            Battle knowledge placeholders
-          </h3>
-        </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-notebook-accent">
+                Immunity
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {pokemonDetail.immunities.map((type) => (
+                  <span
+                    key={type}
+                    className="rounded-full border border-notebook-border bg-notebook-background px-3 py-1 text-xs font-semibold text-notebook-muted"
+                  >
+                    {type}
+                  </span>
+                ))}
+              </div>
+            </div>
 
-        <div className="grid gap-4 lg:grid-cols-3">
-          <article className="rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm">
-            <p className="text-base font-semibold text-notebook-text">Battle notes</p>
-            <p className="mt-3 text-sm leading-6 text-notebook-muted">{pokemonDetail.battleNotes}</p>
-          </article>
+            <div className="rounded-2xl border border-notebook-border bg-notebook-background px-4 py-3">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-notebook-accent">
+                Key battle memo
+              </p>
+              <p className="mt-2 text-sm leading-6 text-notebook-muted">{pokemonDetail.keyMemo}</p>
+            </div>
 
-          <article className="rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm">
-            <p className="text-base font-semibold text-notebook-text">Build notes</p>
-            <p className="mt-3 text-sm leading-6 text-notebook-muted">{pokemonDetail.buildNotes}</p>
-          </article>
-
-          <article className="rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm">
-            <p className="text-base font-semibold text-notebook-text">Related notes</p>
-            <p className="mt-3 text-sm leading-6 text-notebook-muted">{pokemonDetail.relatedNotes}</p>
-          </article>
-        </div>
-      </section>
+            <div className="rounded-2xl border border-notebook-border bg-notebook-background px-4 py-3">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-notebook-accent">
+                Build summary
+              </p>
+              <p className="mt-2 text-sm leading-6 text-notebook-muted">{pokemonDetail.buildSummary}</p>
+            </div>
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }
