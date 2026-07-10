@@ -1,33 +1,40 @@
+import { Link } from "react-router-dom";
+
 const placeholderPokemon = [
   {
     name: "Dragonite",
     types: ["Dragon", "Flying"],
     note: "Bulky setup attacker placeholder.",
     weakness: "Ice, Rock, Dragon, Fairy",
+    href: "/pokedex/dragonite",
   },
   {
     name: "Garchomp",
     types: ["Dragon", "Ground"],
     note: "Fast physical attacker placeholder.",
     weakness: "Ice, Dragon, Fairy",
+    href: null,
   },
   {
     name: "Rotom-Wash",
     types: ["Electric", "Water"],
     note: "Defensive pivot and utility placeholder.",
     weakness: "Grass",
+    href: null,
   },
   {
     name: "Flutter Mane",
     types: ["Ghost", "Fairy"],
     note: "Fast special attacker placeholder.",
     weakness: "Ghost, Steel",
+    href: null,
   },
   {
     name: "Kingambit",
     types: ["Dark", "Steel"],
     note: "Late-game cleaner placeholder.",
     weakness: "Fighting, Ground, Fire",
+    href: null,
   },
 ];
 
@@ -81,40 +88,56 @@ function PokedexPage() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {placeholderPokemon.map((pokemon) => (
-            <article
-              key={pokemon.name}
-              className="rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-lg font-semibold text-notebook-text">{pokemon.name}</p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {pokemon.types.map((type) => (
-                      <span
-                        key={type}
-                        className="rounded-full border border-notebook-border bg-notebook-background px-3 py-1 text-xs font-semibold text-notebook-accent"
-                      >
-                        {type}
-                      </span>
-                    ))}
+          {placeholderPokemon.map((pokemon) => {
+            const cardContent = (
+              <>
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-lg font-semibold text-notebook-text">{pokemon.name}</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {pokemon.types.map((type) => (
+                        <span
+                          key={type}
+                          className="rounded-full border border-notebook-border bg-notebook-background px-3 py-1 text-xs font-semibold text-notebook-accent"
+                        >
+                          {type}
+                        </span>
+                      ))}
+                    </div>
                   </div>
+                  <span className="rounded-full bg-notebook-background px-3 py-1 text-xs font-medium text-notebook-muted">
+                    Note
+                  </span>
                 </div>
-                <span className="rounded-full bg-notebook-background px-3 py-1 text-xs font-medium text-notebook-muted">
-                  Note
-                </span>
-              </div>
 
-              <p className="mt-5 text-sm leading-6 text-notebook-muted">{pokemon.note}</p>
+                <p className="mt-5 text-sm leading-6 text-notebook-muted">{pokemon.note}</p>
 
-              <div className="mt-5 rounded-2xl border border-notebook-border bg-notebook-background px-4 py-3">
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-notebook-accent">
-                  Weakness placeholder
-                </p>
-                <p className="mt-2 text-sm leading-6 text-notebook-muted">{pokemon.weakness}</p>
-              </div>
-            </article>
-          ))}
+                <div className="mt-5 rounded-2xl border border-notebook-border bg-notebook-background px-4 py-3">
+                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-notebook-accent">
+                    Weakness placeholder
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-notebook-muted">{pokemon.weakness}</p>
+                </div>
+              </>
+            );
+
+            return (
+              <article key={pokemon.name}>
+                {pokemon.href === null ? (
+                  <div className="rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                    {cardContent}
+                  </div>
+                ) : (
+                  <Link
+                    to={pokemon.href}
+                    className="block rounded-2xl border border-notebook-border bg-notebook-card p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-notebook-accent/20"
+                  >
+                    {cardContent}
+                  </Link>
+                )}
+              </article>
+            );
+          })}
         </div>
       </section>
     </div>
