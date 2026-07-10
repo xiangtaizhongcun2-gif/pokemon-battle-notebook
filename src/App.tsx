@@ -4,6 +4,7 @@ import BattleLogsPage from "./pages/BattleLogsPage";
 import DamageNotesPage from "./pages/DamageNotesPage";
 import DashboardPage from "./pages/DashboardPage";
 import PartiesPage from "./pages/PartiesPage";
+import PartyDetailPage from "./pages/PartyDetailPage";
 import PokedexPage from "./pages/PokedexPage";
 import PokemonDetailPage from "./pages/PokemonDetailPage";
 import ResearchNotesPage from "./pages/ResearchNotesPage";
@@ -18,6 +19,7 @@ function App() {
         <Route path="/pokedex" element={<PokedexPage />} />
         <Route path="/pokedex/dragonite" element={<PokemonDetailPage />} />
         <Route path="/parties" element={<PartiesPage />} />
+        <Route path="/parties/dragonite-balance" element={<PartyDetailPage />} />
         <Route path="/battle-logs" element={<BattleLogsPage />} />
         <Route path="/research-notes" element={<ResearchNotesPage />} />
         <Route path="/damage-notes" element={<DamageNotesPage />} />
