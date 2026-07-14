@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
-import { POKEDEX } from "./simple/data";
 import { BuildEditor } from "./simple/BuildEditor";
+import { POKEDEX } from "./simple/data";
 import type { BattleLog, FieldChangeEvent, Party, PokemonBuild, PokemonEntry, View } from "./simple/model";
+import { usePokedex } from "./simple/pokedex";
 import { MatchupList, StatTable, TypeBadge } from "./simple/Shared";
 import { createId, emptyStats, getPokemon, useStoredState } from "./simple/storage";
 
 function App() {
   const [state, setState] = useStoredState();
+  const { pokedex, status: pokedexStatus, error: pokedexError } = usePokedex();
   const [view, setView] = useState<View>("parties");
   const [selectedPartyId, setSelectedPartyId] = useState(state.parties[0]?.id ?? "");
   const [editingBuildId, setEditingBuildId] = useState<string | null>(null);
@@ -18,15 +20,21 @@ function App() {
 
   const selectedParty = state.parties.find((party) => party.id === selectedPartyId) ?? state.parties[0];
   const editingBuild = selectedParty?.members.find((member) => member.id === editingBuildId);
-  const selectedPokemon = getPokemon(selectedPokemonId) ?? POKEDEX[0];
+  const selectedPokemon = getPokemon(selectedPokemonId, pokedex) ?? pokedex[0] ?? POKEDEX[0];
 
   const filteredPokemon = useMemo(() => {
     const normalized = search.trim().toLowerCase();
-    if (!normalized) return POKEDEX;
-    return POKEDEX.filter((pokemon) =>
+    if (!normalized) return pokedex;
+    return pokedex.filter((pokemon) =>
       `${pokemon.name} ${pokemon.englishName} ${pokemon.number}`.toLowerCase().includes(normalized),
     );
-  }, [search]);
+  }, [pokedex, search]);
+
+  useEffect(() => {
+    if (!pokedex.some((pokemon) => pokemon.id === selectedPokemonId)) {
+      setSelectedPokemonId(pokedex[0]?.id ?? POKEDEX[0].id);
+    }
+  }, [pokedex, selectedPokemonId]);
 
   useEffect(() => {
     if (state.parties.length === 0) {
@@ -236,7 +244,7 @@ function App() {
                     <div className="member-grid">
                       {Array.from({ length: 6 }, (_, index) => {
                         const member = selectedParty.members[index];
-                        const pokemon = member ? getPokemon(member.speciesId) : undefined;
+                        const pokemon = member ? getPokemon(member.speciesId, pokedex) : undefined;
                         if (!member || !pokemon) {
                           return (
                             <button
@@ -269,7 +277,12 @@ function App() {
                     </div>
 
                     {editingBuild && (
-                      <BuildEditor build={editingBuild} onChange={updateBuild} onDelete={deleteBuild} />
+                      <BuildEditor
+                        build={editingBuild}
+                        pokedex={pokedex}
+                        onChange={updateBuild}
+                        onDelete={deleteBuild}
+                      />
                     )}
 
                     <div className="notes-grid">
@@ -318,6 +331,11 @@ function App() {
                 <p className="eyebrow">POKÉDEX</p>
                 <h1>ポケモン図鑑</h1>
               </div>
+              <p className={`pokedex-status ${pokedexStatus}`} role="status">
+                {pokedexStatus === "loading" && `全国図鑑を読み込み中… 現在${pokedex.length}匹`}
+                {pokedexStatus === "ready" && `全国図鑑 ${pokedex.length}匹`}
+                {pokedexStatus === "fallback" && `ローカル図鑑 ${pokedex.length}匹`}
+              </p>
             </div>
 
             <div className="pokedex-toolbar">
@@ -382,7 +400,7 @@ function App() {
 
                 <div className="detail-section">
                   <h3>特性</h3>
-                  <p>{selectedPokemon.abilities.join(" / ")}</p>
+                  <p>{selectedPokemon.abilities.join(" / ") || "データなし"}</p>
                 </div>
 
                 <button
@@ -393,8 +411,10 @@ function App() {
                 >
                   選択中のパーティに追加
                 </button>
-                <p className="helper-text">
-                  図鑑データは、まず対戦でよく使われるポケモンを収録しています。
+                <p className={pokedexStatus === "fallback" ? "helper-text error-text" : "helper-text"}>
+                  {pokedexStatus === "fallback"
+                    ? `全国図鑑を取得できなかったため、ローカルデータを表示しています。${pokedexError ? ` ${pokedexError}` : ""}`
+                    : "全国図鑑データはPokéAPIから取得し、このブラウザにキャッシュされます。"}
                 </p>
               </article>
             </div>
@@ -550,7 +570,7 @@ function App() {
         )}
       </main>
 
-      <footer>データはこのブラウザに自動保存されます。</footer>
+      <footer>パーティと対戦履歴はこのブラウザに自動保存されます。</footer>
     </div>
   );
 }
