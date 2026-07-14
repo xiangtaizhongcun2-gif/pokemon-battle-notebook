@@ -1,0 +1,150 @@
+import { ALL_TYPES, NATURES } from "./data";
+import type { FieldChangeEvent, PokemonBuild, PokemonType, Stats } from "./model";
+import { MatchupList, TypeBadge } from "./Shared";
+import { getPokemon } from "./storage";
+
+export function BuildEditor({
+  build,
+  onChange,
+  onDelete,
+}: {
+  build: PokemonBuild;
+  onChange: (buildId: string, patch: Partial<PokemonBuild>) => void;
+  onDelete: (buildId: string) => void;
+}) {
+  const pokemon = getPokemon(build.speciesId);
+  if (!pokemon) return null;
+
+  const evTotal = Object.values(build.evs).reduce((sum, value) => sum + value, 0);
+  const statFields: { key: keyof Stats; label: string }[] = [
+    { key: "hp", label: "H" },
+    { key: "attack", label: "A" },
+    { key: "defense", label: "B" },
+    { key: "specialAttack", label: "C" },
+    { key: "specialDefense", label: "D" },
+    { key: "speed", label: "S" },
+  ];
+
+  return (
+    <div className="build-editor">
+      <div className="inline-heading">
+        <div>
+          <p className="eyebrow">BUILD</p>
+          <h2>{pokemon.name}</h2>
+          <div className="badge-row">
+            {pokemon.types.map((type) => (
+              <TypeBadge key={type} type={type} />
+            ))}
+          </div>
+        </div>
+        <button className="danger-text-button" type="button" onClick={() => onDelete(build.id)}>
+          パーティから外す
+        </button>
+      </div>
+
+      <div className="form-grid">
+        <label>
+          特性
+          <select
+            value={build.ability}
+            onChange={(event: FieldChangeEvent) => onChange(build.id, { ability: event.target.value })}
+          >
+            {pokemon.abilities.map((ability) => (
+              <option key={ability}>{ability}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          持ち物
+          <input
+            value={build.item}
+            onChange={(event: FieldChangeEvent) => onChange(build.id, { item: event.target.value })}
+            placeholder="例：こだわりスカーフ"
+          />
+        </label>
+        <label>
+          性格
+          <select
+            value={build.nature}
+            onChange={(event: FieldChangeEvent) => onChange(build.id, { nature: event.target.value })}
+          >
+            {NATURES.map((nature) => (
+              <option key={nature}>{nature}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          テラスタイプ
+          <select
+            value={build.teraType}
+            onChange={(event: FieldChangeEvent) =>
+              onChange(build.id, { teraType: event.target.value as PokemonType })
+            }
+          >
+            {ALL_TYPES.map((type) => (
+              <option key={type}>{type}</option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      <div className="detail-section">
+        <h3>技</h3>
+        <div className="move-grid">
+          {build.moves.map((move, index) => (
+            <input
+              aria-label={`技${index + 1}`}
+              key={index}
+              value={move}
+              placeholder={`技${index + 1}`}
+              onChange={(event: FieldChangeEvent) => {
+                const moves = [...build.moves] as PokemonBuild["moves"];
+                moves[index] = event.target.value;
+                onChange(build.id, { moves });
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="detail-section">
+        <div className="inline-heading compact-heading">
+          <h3>努力値</h3>
+          <span className={evTotal > 510 ? "ev-total invalid" : "ev-total"}>合計 {evTotal} / 510</span>
+        </div>
+        <div className="ev-grid">
+          {statFields.map((field) => (
+            <label key={field.key}>
+              {field.label}
+              <input
+                type="number"
+                min="0"
+                max="252"
+                value={build.evs[field.key]}
+                onChange={(event: FieldChangeEvent) => {
+                  const value = Math.max(0, Math.min(252, Number(event.target.value) || 0));
+                  onChange(build.id, { evs: { ...build.evs, [field.key]: value } });
+                }}
+              />
+            </label>
+          ))}
+        </div>
+        {evTotal > 510 && <p className="validation-message">努力値の合計が510を超えています。</p>}
+      </div>
+
+      <div className="detail-section">
+        <h3>弱点・耐性</h3>
+        <MatchupList types={pokemon.types} />
+      </div>
+
+      <label>
+        メモ
+        <textarea
+          value={build.memo}
+          onChange={(event: FieldChangeEvent) => onChange(build.id, { memo: event.target.value })}
+          placeholder="役割、調整意図、使い方など"
+        />
+      </label>
+    </div>
+  );
+}
