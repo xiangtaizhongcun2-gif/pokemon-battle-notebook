@@ -20,6 +20,8 @@ export type {
   UserSettingId,
 } from "./ids";
 
+export type { BaseStats, PokemonSpecies } from "./pokemon-species";
+
 export type {
   PokemonType,
   TypeChart,
