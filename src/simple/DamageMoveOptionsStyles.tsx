@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+import "../pwa.css";
+import { PwaManager } from "./PwaManager";
 
 const styles = `
 .damage-move-options-host { min-width: 0; }
@@ -92,5 +94,10 @@ export function DamageMoveOptionsStyles() {
     return () => observer.disconnect();
   }, []);
 
-  return <style>{styles}</style>;
+  return (
+    <>
+      <style>{styles}</style>
+      <PwaManager />
+    </>
+  );
 }
