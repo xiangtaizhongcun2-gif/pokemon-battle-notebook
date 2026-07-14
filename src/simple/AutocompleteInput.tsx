@@ -7,6 +7,7 @@ export function AutocompleteInput({
   options,
   placeholder,
   onChange,
+  onCommit,
   emptyMessage = "一致する候補がありません。",
   maxResults = 12,
 }: {
@@ -15,6 +16,7 @@ export function AutocompleteInput({
   options: string[];
   placeholder?: string;
   onChange: (value: string) => void;
+  onCommit?: (value: string) => void;
   emptyMessage?: string;
   maxResults?: number;
 }) {
@@ -32,8 +34,14 @@ export function AutocompleteInput({
     return candidates.slice(0, maxResults);
   }, [maxResults, options, value]);
 
+  const commitValue = (nextValue: string) => {
+    const normalized = nextValue.trim();
+    if (normalized) onCommit?.(normalized);
+  };
+
   const selectOption = (option: string) => {
     onChange(option);
+    commitValue(option);
     setOpen(false);
     setActiveIndex(-1);
   };
@@ -53,10 +61,16 @@ export function AutocompleteInput({
       return;
     }
 
-    if (event.key === "Enter" && open && activeIndex >= 0) {
+    if (event.key === "Enter") {
       event.preventDefault();
-      const option = filteredOptions[activeIndex];
-      if (option) selectOption(option);
+      const option = open && activeIndex >= 0 ? filteredOptions[activeIndex] : undefined;
+      if (option) {
+        selectOption(option);
+      } else {
+        commitValue(value);
+        setOpen(false);
+        setActiveIndex(-1);
+      }
       return;
     }
 
@@ -85,6 +99,7 @@ export function AutocompleteInput({
         }
         onFocus={() => setOpen(true)}
         onBlur={() => {
+          commitValue(value);
           setOpen(false);
           setActiveIndex(-1);
         }}
