@@ -3,7 +3,8 @@ import type { Dispatch, SetStateAction } from "react";
 import { POKEDEX } from "./data";
 import type { AppState, PokemonEntry, Stats } from "./model";
 
-const STORAGE_KEY = "pokemon-battle-notebook.simple.v1";
+export const APP_STATE_STORAGE_KEY = "pokemon-battle-notebook.simple.v1";
+export const APP_STATE_CHANGED_EVENT = "pokemon-battle-notebook:state-changed";
 
 export const emptyStats = (): Stats => ({
   hp: 0,
@@ -42,18 +43,25 @@ export function getPokemon(
   return pokedex.find((pokemon) => pokemon.id === speciesId);
 }
 
+export function readStoredState(): AppState {
+  try {
+    const saved = localStorage.getItem(APP_STATE_STORAGE_KEY);
+    return saved ? (JSON.parse(saved) as AppState) : initialState;
+  } catch {
+    return initialState;
+  }
+}
+
 export function useStoredState(): [AppState, Dispatch<SetStateAction<AppState>>] {
-  const [state, setState] = useState<AppState>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? (JSON.parse(saved) as AppState) : initialState;
-    } catch {
-      return initialState;
-    }
-  });
+  const [state, setState] = useState<AppState>(() => readStoredState());
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStorage.setItem(APP_STATE_STORAGE_KEY, JSON.stringify(state));
+    window.dispatchEvent(
+      new CustomEvent<AppState>(APP_STATE_CHANGED_EVENT, {
+        detail: state,
+      }),
+    );
   }, [state]);
 
   return [state, setState];
