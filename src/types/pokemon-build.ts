@@ -1,3 +1,4 @@
+import type { BattleMechanic } from "./battle-mechanic";
 import type { BaseEntity } from "./base";
 import type { PokemonSpeciesId, TagId } from "./ids";
 import type { PokemonType } from "./type-chart";
@@ -33,6 +34,7 @@ export type PokemonBuild = BaseEntity & {
   evs?: StatSpread;
   ivs?: StatSpread;
   actualStats?: StatSpread;
+  battleMechanics: BattleMechanic[];
   roleTagIds: TagId[];
   memo?: string;
 };
