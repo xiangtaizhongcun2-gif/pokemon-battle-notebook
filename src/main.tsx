@@ -12,6 +12,7 @@ import "./opponent-pokemon-statistics.css";
 import "./selection-statistics.css";
 import "./party-analysis.css";
 import "./build-templates.css";
+import "./damage-calculator.css";
 import { BattleStatistics } from "./simple/BattleStatistics";
 import { OpponentTeamSearch } from "./simple/OpponentTeamSearch";
 import { DataBackupManager } from "./simple/DataBackupManager";
@@ -22,6 +23,7 @@ import { OwnSelectionPicker } from "./simple/OwnSelectionPicker";
 import { SelectionStatistics } from "./simple/SelectionStatistics";
 import { PartyAnalysis } from "./simple/PartyAnalysis";
 import { BuildTemplateManager } from "./simple/BuildTemplateManager";
+import { DamageCalculatorMount } from "./simple/DamageCalculatorMount";
 
 const rootElement = document.getElementById("root");
 
@@ -32,6 +34,7 @@ if (rootElement === null) {
 createRoot(rootElement).render(
   <StrictMode>
     <App />
+    <DamageCalculatorMount />
     <BuildTemplateManager />
     <OwnSelectionPicker />
     <OpponentTeamSearch />
