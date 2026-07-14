@@ -11,6 +11,7 @@ import "./speed-comparison.css";
 import "./opponent-pokemon-statistics.css";
 import "./selection-statistics.css";
 import "./party-analysis.css";
+import "./build-templates.css";
 import { BattleStatistics } from "./simple/BattleStatistics";
 import { OpponentTeamSearch } from "./simple/OpponentTeamSearch";
 import { DataBackupManager } from "./simple/DataBackupManager";
@@ -20,6 +21,7 @@ import { OpponentPokemonStatisticsMount } from "./simple/OpponentPokemonStatisti
 import { OwnSelectionPicker } from "./simple/OwnSelectionPicker";
 import { SelectionStatistics } from "./simple/SelectionStatistics";
 import { PartyAnalysis } from "./simple/PartyAnalysis";
+import { BuildTemplateManager } from "./simple/BuildTemplateManager";
 
 const rootElement = document.getElementById("root");
 
@@ -30,6 +32,7 @@ if (rootElement === null) {
 createRoot(rootElement).render(
   <StrictMode>
     <App />
+    <BuildTemplateManager />
     <OwnSelectionPicker />
     <OpponentTeamSearch />
     <BattleStatistics />
