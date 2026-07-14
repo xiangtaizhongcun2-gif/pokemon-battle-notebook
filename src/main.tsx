@@ -10,6 +10,7 @@ import "./data-backup.css";
 import { BattleStatistics } from "./simple/BattleStatistics";
 import { OpponentTeamSearch } from "./simple/OpponentTeamSearch";
 import { DataBackupManager } from "./simple/DataBackupManager";
+import { PartyCopyAction } from "./simple/PartyCopyAction";
 
 const rootElement = document.getElementById("root");
 
@@ -23,5 +24,6 @@ createRoot(rootElement).render(
     <OpponentTeamSearch />
     <BattleStatistics />
     <DataBackupManager />
+    <PartyCopyAction />
   </StrictMode>,
 );
