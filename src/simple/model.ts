@@ -53,6 +53,8 @@ export type PokemonBuild = {
   moves: [string, string, string, string];
   evs: Stats;
   trainingSystem?: TrainingSystem;
+  level?: number;
+  ivs?: Stats;
   memo: string;
 };
 
