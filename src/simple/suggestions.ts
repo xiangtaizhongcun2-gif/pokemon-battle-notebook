@@ -130,7 +130,8 @@ function humanizeIdentifier(identifier: string): string {
 }
 
 function extractResourceId(url: string): string {
-  return url.split("/").filter(Boolean).at(-1) ?? "";
+  const parts = url.split("/").filter(Boolean);
+  return parts[parts.length - 1] ?? "";
 }
 
 function readCatalog(): SuggestionCatalog | null {
@@ -284,6 +285,7 @@ export function useBuildSuggestions(speciesId: string): {
       .catch(() => {
         if (controller.signal.aborted) return;
         setCatalogStatus("fallback");
+        if (!initialCatalog) setMoveSource("none");
       });
 
     return () => controller.abort();
@@ -299,7 +301,7 @@ export function useBuildSuggestions(speciesId: string): {
 
     if (!catalog) {
       setMoveOptions([]);
-      setMoveSource("loading");
+      setMoveSource(catalogStatus === "fallback" ? "none" : "loading");
       return;
     }
 
@@ -320,7 +322,7 @@ export function useBuildSuggestions(speciesId: string): {
       });
 
     return () => controller.abort();
-  }, [catalog, speciesId]);
+  }, [catalog, catalogStatus, speciesId]);
 
   const itemOptions = catalog?.items ?? FALLBACK_ITEMS;
   const status: SuggestionStatus =
@@ -333,6 +335,8 @@ export function useBuildSuggestions(speciesId: string): {
   let statusText = "このポケモンが覚えられる技と、持たせられる道具を候補表示しています。";
   if (status === "loading") {
     statusText = "技・持ち物の候補を読み込み中です。入力はそのまま続けられます。";
+  } else if (moveSource === "none") {
+    statusText = "候補データを取得できませんでした。特性候補と自由入力は引き続き利用できます。";
   } else if (moveSource === "all") {
     statusText = "ポケモン別の技候補を取得できないため、全技から候補を表示しています。";
   } else if (catalogStatus === "fallback") {
