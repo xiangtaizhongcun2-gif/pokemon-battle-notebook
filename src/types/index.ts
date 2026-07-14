@@ -1,5 +1,11 @@
 export type { BaseEntity, ID, ISODateString } from "./base";
 
+export type {
+  BattleMechanic,
+  BattleMechanicDetail,
+  BattleMechanicType,
+} from "./battle-mechanic";
+
 export type { Game, RuleSet, Season } from "./game";
 
 export type {
