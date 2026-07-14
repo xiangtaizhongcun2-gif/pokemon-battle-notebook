@@ -1,0 +1,212 @@
+.build-template-host {
+  margin-top: 22px;
+}
+
+.build-template-manager {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.build-template-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.build-template-heading h3 {
+  margin-bottom: 5px;
+  font-size: 1rem;
+}
+
+.build-template-heading p:last-child {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.build-template-heading > span {
+  flex: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--soft);
+  padding: 5px 9px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.build-template-save-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.build-template-save-row .primary-button {
+  min-height: 42px;
+  white-space: nowrap;
+}
+
+.build-template-status,
+.build-template-empty,
+.build-template-note {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.build-template-status {
+  border-radius: 8px;
+  padding: 9px 11px;
+}
+
+.build-template-status.success {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.build-template-status.error {
+  background: #fff2f0;
+  color: var(--danger);
+}
+
+.build-template-empty {
+  border: 1px dashed var(--border-strong);
+  border-radius: 10px;
+  padding: 18px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.build-template-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.build-template-card {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fcfcfb;
+  padding: 14px;
+}
+
+.build-template-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.build-template-card-heading > div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.build-template-card-heading strong {
+  overflow-wrap: anywhere;
+}
+
+.build-template-card-heading small {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.build-template-card-heading > span {
+  flex: none;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  padding: 4px 8px;
+  color: var(--accent);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.build-template-card dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.build-template-card dl > div {
+  display: grid;
+  grid-template-columns: 86px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+}
+
+.build-template-card dt {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.build-template-card dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.build-template-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: auto;
+}
+
+.build-template-actions .primary-button,
+.build-template-actions .secondary-button {
+  padding: 7px 10px;
+  font-size: 0.78rem;
+}
+
+.build-template-actions .danger-text-button {
+  margin-left: auto;
+}
+
+.build-template-note {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+@media (max-width: 760px) {
+  .build-template-heading,
+  .build-template-card-heading {
+    align-items: flex-start;
+  }
+
+  .build-template-save-row,
+  .build-template-list {
+    grid-template-columns: 1fr;
+  }
+
+  .build-template-save-row .primary-button {
+    width: 100%;
+  }
+
+  .build-template-card dl > div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .build-template-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .build-template-actions .danger-text-button {
+    margin-left: 0;
+    justify-self: start;
+  }
+}

@@ -58,6 +58,24 @@ export type PokemonBuild = {
   memo: string;
 };
 
+export type BuildTemplate = {
+  id: string;
+  name: string;
+  speciesId: string;
+  ability: string;
+  item: string;
+  nature: string;
+  teraType: PokemonType;
+  moves: [string, string, string, string];
+  evs: Stats;
+  trainingSystem?: TrainingSystem;
+  level?: number;
+  ivs?: Stats;
+  memo: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type Party = {
   id: string;
   name: string;
@@ -80,6 +98,7 @@ export type BattleLog = {
 export type AppState = {
   parties: Party[];
   battleLogs: BattleLog[];
+  buildTemplates?: BuildTemplate[];
 };
 
 export type Matchup = {
