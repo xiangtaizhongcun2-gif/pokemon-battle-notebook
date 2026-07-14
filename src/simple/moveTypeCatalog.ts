@@ -5,13 +5,18 @@ const CSV_BASE_URLS = [
   "https://cdn.jsdelivr.net/gh/PokeAPI/pokeapi@master/data/v2/csv",
   "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv",
 ];
-const CACHE_KEY = "pokemon-battle-notebook.move-type-catalog.v1";
+const CACHE_KEY = "pokemon-battle-notebook.move-type-catalog.v3";
 const CACHE_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 const JAPANESE_LANGUAGE_ID = "1";
 
 type CsvRecord = Record<string, string>;
 export type MoveCategory = "physical" | "special" | "status";
-export type MoveMetadata = { type: PokemonType; category: MoveCategory };
+export type MoveMetadata = {
+  name: string;
+  type: PokemonType;
+  category: MoveCategory;
+  power: number | null;
+};
 export type MoveCatalogStatus = "loading" | "ready" | "fallback";
 
 type StoredMoveCatalog = {
@@ -20,24 +25,10 @@ type StoredMoveCatalog = {
 };
 
 const TYPE_BY_ID: Record<string, PokemonType> = {
-  "1": "ノーマル",
-  "2": "かくとう",
-  "3": "ひこう",
-  "4": "どく",
-  "5": "じめん",
-  "6": "いわ",
-  "7": "むし",
-  "8": "ゴースト",
-  "9": "はがね",
-  "10": "ほのお",
-  "11": "みず",
-  "12": "くさ",
-  "13": "でんき",
-  "14": "エスパー",
-  "15": "こおり",
-  "16": "ドラゴン",
-  "17": "あく",
-  "18": "フェアリー",
+  "1": "ノーマル", "2": "かくとう", "3": "ひこう", "4": "どく", "5": "じめん",
+  "6": "いわ", "7": "むし", "8": "ゴースト", "9": "はがね", "10": "ほのお",
+  "11": "みず", "12": "くさ", "13": "でんき", "14": "エスパー", "15": "こおり",
+  "16": "ドラゴン", "17": "あく", "18": "フェアリー",
 };
 
 const CATEGORY_BY_ID: Record<string, MoveCategory> = {
@@ -46,25 +37,30 @@ const CATEGORY_BY_ID: Record<string, MoveCategory> = {
   "3": "special",
 };
 
+function fallback(name: string, type: PokemonType, category: MoveCategory, power: number | null): MoveMetadata {
+  return { name, type, category, power };
+}
+
 const FALLBACK_MOVES: Record<string, MoveMetadata> = {
-  じしん: { type: "じめん", category: "physical" },
-  しんそく: { type: "ノーマル", category: "physical" },
-  アイアンヘッド: { type: "はがね", category: "physical" },
-  ふいうち: { type: "あく", category: "physical" },
-  インファイト: { type: "かくとう", category: "physical" },
-  とんぼがえり: { type: "むし", category: "physical" },
-  フレアドライブ: { type: "ほのお", category: "physical" },
-  じゃれつく: { type: "フェアリー", category: "physical" },
-  かえんほうしゃ: { type: "ほのお", category: "special" },
-  ハイドロポンプ: { type: "みず", category: "special" },
-  れいとうビーム: { type: "こおり", category: "special" },
-  りゅうせいぐん: { type: "ドラゴン", category: "special" },
-  シャドーボール: { type: "ゴースト", category: "special" },
-  ムーンフォース: { type: "フェアリー", category: "special" },
-  まもる: { type: "ノーマル", category: "status" },
-  りゅうのまい: { type: "ドラゴン", category: "status" },
-  つるぎのまい: { type: "ノーマル", category: "status" },
-  ステルスロック: { type: "いわ", category: "status" },
+  じしん: fallback("じしん", "じめん", "physical", 100),
+  しんそく: fallback("しんそく", "ノーマル", "physical", 80),
+  アイアンヘッド: fallback("アイアンヘッド", "はがね", "physical", 80),
+  ふいうち: fallback("ふいうち", "あく", "physical", 70),
+  インファイト: fallback("インファイト", "かくとう", "physical", 120),
+  とんぼがえり: fallback("とんぼがえり", "むし", "physical", 70),
+  フレアドライブ: fallback("フレアドライブ", "ほのお", "physical", 120),
+  じゃれつく: fallback("じゃれつく", "フェアリー", "physical", 90),
+  かえんほうしゃ: fallback("かえんほうしゃ", "ほのお", "special", 90),
+  ハイドロポンプ: fallback("ハイドロポンプ", "みず", "special", 110),
+  れいとうビーム: fallback("れいとうビーム", "こおり", "special", 90),
+  りゅうせいぐん: fallback("りゅうせいぐん", "ドラゴン", "special", 130),
+  シャドーボール: fallback("シャドーボール", "ゴースト", "special", 80),
+  ムーンフォース: fallback("ムーンフォース", "フェアリー", "special", 95),
+  テラバースト: fallback("テラバースト", "ノーマル", "special", 80),
+  まもる: fallback("まもる", "ノーマル", "status", 0),
+  りゅうのまい: fallback("りゅうのまい", "ドラゴン", "status", 0),
+  つるぎのまい: fallback("つるぎのまい", "ノーマル", "status", 0),
+  ステルスロック: fallback("ステルスロック", "いわ", "status", 0),
 };
 
 function normalize(value: string): string {
@@ -155,7 +151,7 @@ function writeStoredCatalog(catalog: StoredMoveCatalog): void {
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify(catalog));
   } catch {
-    // The analysis can continue with the in-memory catalog.
+    // The app can continue with the in-memory catalog.
   }
 }
 
@@ -178,11 +174,17 @@ async function loadMoveCatalog(signal: AbortSignal): Promise<StoredMoveCatalog> 
     const type = TYPE_BY_ID[row.type_id];
     const category = CATEGORY_BY_ID[row.damage_class_id];
     if (!name || !type || !category) return;
-    metadata[normalize(name)] = { type, category };
+    const parsedPower = Number(row.power);
+    metadata[normalize(name)] = {
+      name,
+      type,
+      category,
+      power: category === "status" ? 0 : row.power && Number.isFinite(parsedPower) ? parsedPower : null,
+    };
   });
 
   if (Object.keys(metadata).length < 500) {
-    throw new Error("技タイプデータが不足しています。");
+    throw new Error("技データが不足しています。");
   }
 
   return { savedAt: Date.now(), moves: metadata };
