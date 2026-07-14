@@ -6,8 +6,10 @@ import "./battle-statistics.css";
 import "./build-suggestions.css";
 import "./champions-training.css";
 import "./opponent-team-search.css";
+import "./data-backup.css";
 import { BattleStatistics } from "./simple/BattleStatistics";
 import { OpponentTeamSearch } from "./simple/OpponentTeamSearch";
+import { DataBackupManager } from "./simple/DataBackupManager";
 
 const rootElement = document.getElementById("root");
 
@@ -20,5 +22,6 @@ createRoot(rootElement).render(
     <App />
     <OpponentTeamSearch />
     <BattleStatistics />
+    <DataBackupManager />
   </StrictMode>,
 );
