@@ -20,6 +20,8 @@ export type {
   UserSettingId,
 } from "./ids";
 
+export type { MoveSlot, PokemonBuild, StatSpread } from "./pokemon-build";
+
 export type { PokemonKnowledgePage } from "./pokemon-knowledge-page";
 
 export type { BaseStats, PokemonSpecies } from "./pokemon-species";
