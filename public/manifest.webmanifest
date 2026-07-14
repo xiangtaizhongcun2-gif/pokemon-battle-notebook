@@ -1,0 +1,30 @@
+{
+  "id": "./",
+  "name": "Pokémon Battle Notebook",
+  "short_name": "Battle Notebook",
+  "description": "ポケモンのパーティ構築、型、対戦履歴、ダメージ計算を管理するバトルノートです。",
+  "lang": "ja",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#f7f7f5",
+  "theme_color": "#2f6f57",
+  "categories": ["productivity", "utilities", "games"],
+  "icons": [
+    {
+      "src": "./pwa-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./pwa-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -13,6 +13,7 @@ import "./selection-statistics.css";
 import "./party-analysis.css";
 import "./build-templates.css";
 import "./damage-calculator.css";
+import "./pwa.css";
 import { BattleStatistics } from "./simple/BattleStatistics";
 import { OpponentTeamSearch } from "./simple/OpponentTeamSearch";
 import { DataBackupManager } from "./simple/DataBackupManager";
@@ -26,6 +27,8 @@ import { BuildTemplateManager } from "./simple/BuildTemplateManager";
 import { DamageCalculatorMount } from "./simple/DamageCalculatorMount";
 import { DamageMoveOptionsEnhancer } from "./simple/DamageMoveOptionsEnhancer";
 import { DamageMoveOptionsStyles } from "./simple/DamageMoveOptionsStyles";
+import { PwaManager } from "./simple/PwaManager";
+import { PwaMetadata } from "./simple/PwaMetadata";
 
 const rootElement = document.getElementById("root");
 
@@ -36,6 +39,8 @@ if (rootElement === null) {
 createRoot(rootElement).render(
   <StrictMode>
     <App />
+    {import.meta.env.PROD && <PwaMetadata />}
+    {import.meta.env.PROD && <PwaManager />}
     <DamageMoveOptionsStyles />
     <DamageCalculatorMount />
     <DamageMoveOptionsEnhancer />
