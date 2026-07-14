@@ -1,0 +1,361 @@
+.damage-calculator {
+  display: grid;
+  gap: 24px;
+}
+
+.damage-page-heading {
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.damage-page-heading p:last-child {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.damage-swap-button {
+  white-space: nowrap;
+}
+
+.damage-side-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.damage-side-card,
+.damage-move-card,
+.damage-result-card {
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #fff;
+  padding: 22px;
+}
+
+.damage-side-card {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+
+.damage-card-heading,
+.damage-result-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.damage-card-heading h2,
+.damage-result-heading h2 {
+  margin-bottom: 0;
+}
+
+.damage-card-heading > span {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 9px;
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.damage-type-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-radius: 9px;
+  background: var(--soft);
+  padding: 10px 12px;
+  font-size: 0.84rem;
+}
+
+.damage-type-row span,
+.damage-source-label,
+.damage-formula-detail,
+.damage-calculator-note {
+  color: var(--muted);
+}
+
+.damage-side-settings {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.damage-check-row,
+.damage-toggle-grid label {
+  display: flex;
+  grid-template-columns: none;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.damage-check-row input,
+.damage-toggle-grid input {
+  width: auto;
+  margin: 0;
+}
+
+.damage-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.damage-stat-grid label {
+  gap: 5px;
+  text-align: center;
+  font-size: 0.78rem;
+}
+
+.damage-stat-grid input {
+  min-width: 0;
+  padding: 8px 4px;
+  text-align: center;
+}
+
+.damage-source-label {
+  overflow: hidden;
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.damage-move-card {
+  display: grid;
+  gap: 18px;
+}
+
+.move-catalog-status {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 9px;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.move-catalog-status.ready {
+  border-color: #bed8ca;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.move-catalog-status.fallback {
+  color: var(--danger);
+}
+
+.damage-move-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 2fr) repeat(4, minmax(100px, 1fr));
+  gap: 12px;
+  align-items: end;
+}
+
+.damage-move-grid > label:first-child {
+  grid-row: span 2;
+  align-self: stretch;
+}
+
+.damage-toggle-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+.damage-toggle-grid label {
+  color: #374151;
+  font-size: 0.84rem;
+}
+
+.damage-helper,
+.damage-warning {
+  margin: 0;
+  border-radius: 9px;
+  padding: 10px 12px;
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.damage-helper {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.damage-warning {
+  background: #fff4e5;
+  color: #8a4b08;
+}
+
+.damage-result-card {
+  display: grid;
+  gap: 18px;
+  border-color: #bed8ca;
+  background: linear-gradient(180deg, #ffffff, #fbfdfc);
+}
+
+.damage-result-heading {
+  align-items: center;
+}
+
+.damage-ko-label {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: var(--accent);
+  padding: 8px 13px;
+  color: #fff;
+  font-size: 0.88rem;
+}
+
+.damage-result-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.damage-result-summary > div {
+  display: grid;
+  gap: 5px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  padding: 13px;
+}
+
+.damage-result-summary span {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.damage-result-summary strong {
+  font-size: 1.08rem;
+}
+
+.damage-hp-bar {
+  overflow: hidden;
+  height: 12px;
+  border-radius: 999px;
+  background: #eef0ee;
+}
+
+.damage-hp-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width 160ms ease;
+}
+
+.damage-rolls {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.damage-rolls span {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  padding: 7px 5px;
+  color: #4b5563;
+  font-size: 0.72rem;
+  text-align: center;
+}
+
+.damage-rolls span.ko {
+  border-color: #f2b8b5;
+  background: #fff1f0;
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.damage-formula-detail,
+.damage-calculator-note {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.65;
+}
+
+.damage-calculator-note {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--soft);
+  padding: 13px 15px;
+}
+
+@media (max-width: 980px) {
+  .damage-move-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .damage-move-grid > label:first-child {
+    grid-column: span 2;
+    grid-row: auto;
+  }
+
+  .damage-result-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .damage-rolls {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .damage-calculator-nav-button {
+    padding-inline: 10px;
+  }
+
+  .damage-page-heading,
+  .damage-card-heading,
+  .damage-result-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .damage-side-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .damage-stat-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .damage-move-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .damage-move-grid > label:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .damage-ko-label {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 520px) {
+  .damage-side-card,
+  .damage-move-card,
+  .damage-result-card {
+    padding: 17px;
+  }
+
+  .damage-side-settings,
+  .damage-move-grid,
+  .damage-result-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .damage-rolls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
