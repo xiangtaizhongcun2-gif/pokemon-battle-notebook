@@ -26,6 +26,7 @@ import { BuildTemplateManager } from "./simple/BuildTemplateManager";
 import { DamageCalculatorMount } from "./simple/DamageCalculatorMount";
 import { DamageMoveOptionsEnhancer } from "./simple/DamageMoveOptionsEnhancer";
 import { DamageMoveOptionsStyles } from "./simple/DamageMoveOptionsStyles";
+import { PwaMetadata } from "./simple/PwaMetadata";
 
 const rootElement = document.getElementById("root");
 
@@ -36,6 +37,7 @@ if (rootElement === null) {
 createRoot(rootElement).render(
   <StrictMode>
     <App />
+    <PwaMetadata />
     <DamageMoveOptionsStyles />
     <DamageCalculatorMount />
     <DamageMoveOptionsEnhancer />
