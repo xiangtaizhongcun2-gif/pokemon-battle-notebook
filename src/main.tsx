@@ -24,6 +24,8 @@ import { SelectionStatistics } from "./simple/SelectionStatistics";
 import { PartyAnalysis } from "./simple/PartyAnalysis";
 import { BuildTemplateManager } from "./simple/BuildTemplateManager";
 import { DamageCalculatorMount } from "./simple/DamageCalculatorMount";
+import { DamageMoveOptionsEnhancer } from "./simple/DamageMoveOptionsEnhancer";
+import { DamageMoveOptionsStyles } from "./simple/DamageMoveOptionsStyles";
 
 const rootElement = document.getElementById("root");
 
@@ -34,7 +36,9 @@ if (rootElement === null) {
 createRoot(rootElement).render(
   <StrictMode>
     <App />
+    <DamageMoveOptionsStyles />
     <DamageCalculatorMount />
+    <DamageMoveOptionsEnhancer />
     <BuildTemplateManager />
     <OwnSelectionPicker />
     <OpponentTeamSearch />
