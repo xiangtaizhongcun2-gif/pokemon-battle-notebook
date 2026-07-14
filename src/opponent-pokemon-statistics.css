@@ -1,0 +1,111 @@
+.opponent-pokemon-statistics-host {
+  margin-top: 22px;
+}
+
+.opponent-pokemon-statistics {
+  display: grid;
+  gap: 14px;
+  border-top: 1px solid var(--border);
+  padding-top: 22px;
+}
+
+.opponent-records-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.opponent-records-heading h3,
+.opponent-records-heading p {
+  margin-bottom: 0;
+}
+
+.opponent-records-heading > div > p:last-child,
+.opponent-records-heading > span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.opponent-records-heading > div > p:last-child {
+  margin-top: 4px;
+}
+
+.opponent-records-heading > span {
+  white-space: nowrap;
+}
+
+.opponent-records-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fcfcfb;
+  padding: 14px;
+}
+
+.opponent-records-toolbar label {
+  width: min(100%, 420px);
+  font-size: 0.78rem;
+}
+
+.opponent-records-toolbar input {
+  margin-top: 6px;
+}
+
+.opponent-records-toolbar p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.opponent-records-table {
+  min-width: 600px;
+}
+
+.opponent-record-pokemon {
+  display: grid;
+  gap: 2px;
+}
+
+.opponent-record-pokemon strong {
+  font-size: 0.88rem;
+}
+
+.opponent-record-pokemon small {
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.opponent-records-table .low-win-rate {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.opponent-records-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 560px) {
+  .opponent-records-heading,
+  .opponent-records-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .opponent-records-heading > span,
+  .opponent-records-toolbar p {
+    white-space: normal;
+  }
+
+  .opponent-records-toolbar label {
+    width: 100%;
+  }
+}
