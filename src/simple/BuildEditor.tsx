@@ -4,6 +4,7 @@ import { MatchupList, TypeBadge } from "./Shared";
 import { getPokemon } from "./storage";
 import { AutocompleteInput } from "./AutocompleteInput";
 import { useBuildSuggestions } from "./suggestions";
+import { usePrioritizedItemOptions } from "./itemHistory";
 
 export function BuildEditor({
   build,
@@ -17,9 +18,13 @@ export function BuildEditor({
   onDelete: (buildId: string) => void;
 }) {
   const pokemon = getPokemon(build.speciesId, pokedex);
-  const { moveOptions, itemOptions, status: suggestionStatus, statusText } = useBuildSuggestions(
-    build.speciesId,
-  );
+  const {
+    moveOptions,
+    itemOptions: availableItemOptions,
+    status: suggestionStatus,
+    statusText,
+  } = useBuildSuggestions(build.speciesId);
+  const { itemOptions, rememberItem } = usePrioritizedItemOptions(availableItemOptions);
   if (!pokemon) return null;
 
   const evTotal = Object.values(build.evs).reduce((sum, value) => sum + value, 0);
@@ -69,6 +74,7 @@ export function BuildEditor({
             options={itemOptions}
             placeholder="例：こだわりスカーフ"
             onChange={(item) => onChange(build.id, { item })}
+            onCommit={rememberItem}
           />
         </label>
         <label>
