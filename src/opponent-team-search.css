@@ -1,0 +1,193 @@
+.opponent-team-search-host {
+  min-width: 0;
+}
+
+.opponent-team-search {
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--soft);
+  padding: 12px;
+  font-weight: 400;
+}
+
+.opponent-team-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.opponent-team-heading > div {
+  display: grid;
+  gap: 2px;
+}
+
+.opponent-team-heading strong {
+  color: #202124;
+  font-size: 0.88rem;
+}
+
+.opponent-team-heading small,
+.opponent-team-heading > span,
+.opponent-team-helper {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.opponent-team-heading > span {
+  flex: none;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: #fff;
+  padding: 3px 8px;
+  font-weight: 700;
+}
+
+.opponent-team-selected {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.opponent-team-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  padding: 7px 8px 7px 10px;
+}
+
+.opponent-team-chip > span {
+  display: grid;
+  min-width: 0;
+}
+
+.opponent-team-chip small {
+  color: var(--muted);
+  font-size: 0.62rem;
+}
+
+.opponent-team-chip strong {
+  overflow: hidden;
+  color: #202124;
+  font-size: 0.8rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.opponent-team-chip button {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  padding: 0;
+  font-size: 1rem;
+}
+
+.opponent-team-chip button:hover {
+  background: #fef0ee;
+  color: var(--danger);
+}
+
+.opponent-team-search-box {
+  position: relative;
+}
+
+.opponent-team-search-box input {
+  background: #fff;
+}
+
+.opponent-team-results {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 5px);
+  right: 0;
+  left: 0;
+  max-height: 280px;
+  overflow: auto;
+  border: 1px solid var(--border-strong);
+  border-radius: 9px;
+  background: #fff;
+  padding: 5px;
+  box-shadow: 0 12px 30px rgba(17, 24, 39, 0.14);
+}
+
+.opponent-team-results button {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr) auto;
+  gap: 9px;
+  align-items: center;
+  width: 100%;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  padding: 9px 8px;
+  color: #202124;
+  text-align: left;
+}
+
+.opponent-team-results button:hover,
+.opponent-team-results button:focus-visible {
+  background: var(--accent-soft);
+  outline: none;
+}
+
+.opponent-team-results button > span:nth-child(2) {
+  display: grid;
+  min-width: 0;
+}
+
+.opponent-team-results strong {
+  overflow: hidden;
+  font-size: 0.82rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.opponent-team-results small,
+.opponent-result-number {
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+
+.opponent-team-results > p {
+  margin: 0;
+  padding: 14px 10px;
+  color: var(--muted);
+  font-size: 0.76rem;
+  text-align: center;
+}
+
+.opponent-team-helper {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.opponent-team-textarea {
+  min-height: 72px;
+}
+
+@media (max-width: 560px) {
+  .opponent-team-selected {
+    grid-template-columns: 1fr;
+  }
+
+  .opponent-team-results button {
+    grid-template-columns: 58px minmax(0, 1fr);
+  }
+
+  .opponent-team-results button > small:last-child {
+    grid-column: 2;
+  }
+}
