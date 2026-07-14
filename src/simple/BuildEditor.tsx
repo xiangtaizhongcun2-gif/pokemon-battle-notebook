@@ -1,5 +1,12 @@
 import { ALL_TYPES, NATURES } from "./data";
-import type { FieldChangeEvent, PokemonBuild, PokemonEntry, PokemonType, Stats } from "./model";
+import type {
+  FieldChangeEvent,
+  PokemonBuild,
+  PokemonEntry,
+  PokemonType,
+  Stats,
+  TrainingSystem,
+} from "./model";
 import { MatchupList, TypeBadge } from "./Shared";
 import { getPokemon } from "./storage";
 import { AutocompleteInput } from "./AutocompleteInput";
@@ -27,7 +34,12 @@ export function BuildEditor({
   const { itemOptions, rememberItem } = usePrioritizedItemOptions(availableItemOptions);
   if (!pokemon) return null;
 
-  const evTotal = Object.values(build.evs).reduce((sum, value) => sum + value, 0);
+  const trainingSystem: TrainingSystem = build.trainingSystem ?? "traditional";
+  const isChampions = trainingSystem === "champions";
+  const allocationLabel = isChampions ? "努力ポイント" : "努力値";
+  const totalLimit = isChampions ? 66 : 510;
+  const perStatLimit = isChampions ? 32 : 252;
+  const allocationTotal = Object.values(build.evs).reduce((sum, value) => sum + value, 0);
   const statFields: { key: keyof Stats; label: string }[] = [
     { key: "hp", label: "H" },
     { key: "attack", label: "A" },
@@ -36,6 +48,9 @@ export function BuildEditor({
     { key: "specialDefense", label: "D" },
     { key: "speed", label: "S" },
   ];
+  const exceedsPerStatLimit = statFields.some((field) => build.evs[field.key] > perStatLimit);
+  const exceedsTotalLimit = allocationTotal > totalLimit;
+  const allocationInvalid = exceedsPerStatLimit || exceedsTotalLimit;
 
   return (
     <div className="build-editor">
@@ -128,28 +143,66 @@ export function BuildEditor({
       </div>
 
       <div className="detail-section">
-        <div className="inline-heading compact-heading">
-          <h3>努力値</h3>
-          <span className={evTotal > 510 ? "ev-total invalid" : "ev-total"}>合計 {evTotal} / 510</span>
+        <div className="training-system-row">
+          <label>
+            育成方式
+            <select
+              value={trainingSystem}
+              onChange={(event: FieldChangeEvent) =>
+                onChange(build.id, { trainingSystem: event.target.value as TrainingSystem })
+              }
+            >
+              <option value="traditional">従来作品（努力値）</option>
+              <option value="champions">ポケモンチャンピオンズ（努力ポイント）</option>
+            </select>
+          </label>
+          <p className="training-rule-note">
+            {isChampions
+              ? "合計66、1つの能力につき32まで"
+              : "合計510、1つの能力につき252まで"}
+          </p>
+        </div>
+
+        <div className="inline-heading compact-heading training-allocation-heading">
+          <h3>{allocationLabel}</h3>
+          <span className={allocationInvalid ? "ev-total invalid" : "ev-total"}>
+            合計 {allocationTotal} / {totalLimit}
+          </span>
         </div>
         <div className="ev-grid">
-          {statFields.map((field) => (
-            <label key={field.key}>
-              {field.label}
-              <input
-                type="number"
-                min="0"
-                max="252"
-                value={build.evs[field.key]}
-                onChange={(event: FieldChangeEvent) => {
-                  const value = Math.max(0, Math.min(252, Number(event.target.value) || 0));
-                  onChange(build.id, { evs: { ...build.evs, [field.key]: value } });
-                }}
-              />
-            </label>
-          ))}
+          {statFields.map((field) => {
+            const statInvalid = build.evs[field.key] > perStatLimit;
+            return (
+              <label key={field.key}>
+                {field.label}
+                <input
+                  type="number"
+                  min="0"
+                  max={perStatLimit}
+                  value={build.evs[field.key]}
+                  aria-invalid={statInvalid}
+                  onChange={(event: FieldChangeEvent) => {
+                    const value = Math.max(
+                      0,
+                      Math.min(perStatLimit, Number(event.target.value) || 0),
+                    );
+                    onChange(build.id, { evs: { ...build.evs, [field.key]: value } });
+                  }}
+                />
+              </label>
+            );
+          })}
         </div>
-        {evTotal > 510 && <p className="validation-message">努力値の合計が510を超えています。</p>}
+        {exceedsPerStatLimit && (
+          <p className="validation-message">
+            1つの能力に割り振れる{allocationLabel}は{perStatLimit}までです。
+          </p>
+        )}
+        {exceedsTotalLimit && (
+          <p className="validation-message">
+            {allocationLabel}の合計が{totalLimit}を超えています。
+          </p>
+        )}
       </div>
 
       <div className="detail-section">
