@@ -112,6 +112,7 @@ export function BuildEditor({
               key={index}
               value={move}
               options={moveOptions}
+              maxResults={moveOptions.length}
               placeholder={`技${index + 1}`}
               onChange={(value) => {
                 const moves = [...build.moves] as PokemonBuild["moves"];
