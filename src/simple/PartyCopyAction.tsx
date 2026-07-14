@@ -71,6 +71,11 @@ export function PartyCopyAction() {
     let host: HTMLSpanElement | null = null;
 
     const attachToPartyEditor = () => {
+      if (host !== null && !host.isConnected) {
+        host = null;
+        setPortalTarget(null);
+      }
+
       const heading = document.querySelector<HTMLElement>(".party-editor > .inline-heading");
       const deleteButton = heading?.querySelector<HTMLButtonElement>(".danger-text-button");
 
