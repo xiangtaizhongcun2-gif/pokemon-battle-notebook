@@ -27,6 +27,7 @@ const initialState: AppState = {
     },
   ],
   battleLogs: [],
+  buildTemplates: [],
 };
 
 export function createId(prefix: string): string {
@@ -54,6 +55,23 @@ export function readStoredState(): AppState {
 
 export function useStoredState(): [AppState, Dispatch<SetStateAction<AppState>>] {
   const [state, setState] = useState<AppState>(() => readStoredState());
+
+  useEffect(() => {
+    const handleStateChanged = (event: Event) => {
+      const nextState = (event as CustomEvent<AppState>).detail;
+      if (nextState) setState(nextState);
+    };
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key === APP_STATE_STORAGE_KEY) setState(readStoredState());
+    };
+
+    window.addEventListener(APP_STATE_CHANGED_EVENT, handleStateChanged);
+    window.addEventListener("storage", handleStorage);
+    return () => {
+      window.removeEventListener(APP_STATE_CHANGED_EVENT, handleStateChanged);
+      window.removeEventListener("storage", handleStorage);
+    };
+  }, []);
 
   useEffect(() => {
     localStorage.setItem(APP_STATE_STORAGE_KEY, JSON.stringify(state));
