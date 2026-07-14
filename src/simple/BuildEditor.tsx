@@ -4,7 +4,6 @@ import type {
   PokemonBuild,
   PokemonEntry,
   PokemonType,
-  Stats,
   TrainingSystem,
 } from "./model";
 import { MatchupList, TypeBadge } from "./Shared";
@@ -12,6 +11,13 @@ import { getPokemon } from "./storage";
 import { AutocompleteInput } from "./AutocompleteInput";
 import { useBuildSuggestions } from "./suggestions";
 import { usePrioritizedItemOptions } from "./itemHistory";
+import {
+  calculateActualStats,
+  DEFAULT_IVS,
+  DEFAULT_LEVEL,
+  getNatureMultiplier,
+  STAT_FIELDS,
+} from "./statCalculator";
 
 export function BuildEditor({
   build,
@@ -40,17 +46,12 @@ export function BuildEditor({
   const totalLimit = isChampions ? 66 : 510;
   const perStatLimit = isChampions ? 32 : 252;
   const allocationTotal = Object.values(build.evs).reduce((sum, value) => sum + value, 0);
-  const statFields: { key: keyof Stats; label: string }[] = [
-    { key: "hp", label: "H" },
-    { key: "attack", label: "A" },
-    { key: "defense", label: "B" },
-    { key: "specialAttack", label: "C" },
-    { key: "specialDefense", label: "D" },
-    { key: "speed", label: "S" },
-  ];
-  const exceedsPerStatLimit = statFields.some((field) => build.evs[field.key] > perStatLimit);
+  const exceedsPerStatLimit = STAT_FIELDS.some((field) => build.evs[field.key] > perStatLimit);
   const exceedsTotalLimit = allocationTotal > totalLimit;
   const allocationInvalid = exceedsPerStatLimit || exceedsTotalLimit;
+  const level = Math.max(1, Math.min(100, Math.trunc(build.level ?? DEFAULT_LEVEL)));
+  const ivs = build.ivs ?? DEFAULT_IVS;
+  const actualStats = calculateActualStats(pokemon, build);
 
   return (
     <div className="build-editor">
@@ -163,6 +164,53 @@ export function BuildEditor({
           </p>
         </div>
 
+        {!isChampions && (
+          <div className="stat-calculation-settings">
+            <label className="level-field">
+              レベル
+              <input
+                type="number"
+                min="1"
+                max="100"
+                value={level}
+                onChange={(event: FieldChangeEvent) => {
+                  const value = Math.max(1, Math.min(100, Number(event.target.value) || 1));
+                  onChange(build.id, { level: value });
+                }}
+              />
+            </label>
+            <div className="iv-settings">
+              <div className="inline-heading compact-heading stat-subheading">
+                <h3>個体値</h3>
+                <span>各能力 0〜31</span>
+              </div>
+              <div className="iv-grid">
+                {STAT_FIELDS.map((field) => (
+                  <label key={field.key}>
+                    {field.label}
+                    <input
+                      type="number"
+                      min="0"
+                      max="31"
+                      value={ivs[field.key]}
+                      onChange={(event: FieldChangeEvent) => {
+                        const value = Math.max(0, Math.min(31, Number(event.target.value) || 0));
+                        onChange(build.id, { ivs: { ...ivs, [field.key]: value } });
+                      }}
+                    />
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {isChampions && (
+          <p className="champions-calculation-note">
+            実数値はLv.50・個体値31相当を基準に、努力ポイント1につき対象能力へ1を加えて計算します。
+          </p>
+        )}
+
         <div className="inline-heading compact-heading training-allocation-heading">
           <h3>{allocationLabel}</h3>
           <span className={allocationInvalid ? "ev-total invalid" : "ev-total"}>
@@ -170,7 +218,7 @@ export function BuildEditor({
           </span>
         </div>
         <div className="ev-grid">
-          {statFields.map((field) => {
+          {STAT_FIELDS.map((field) => {
             const statInvalid = build.evs[field.key] > perStatLimit;
             return (
               <label key={field.key}>
@@ -203,6 +251,37 @@ export function BuildEditor({
             {allocationLabel}の合計が{totalLimit}を超えています。
           </p>
         )}
+
+        <div className="actual-stat-panel">
+          <div className="inline-heading compact-heading actual-stat-heading">
+            <h3>実数値</h3>
+            <span>{isChampions ? "Lv.50固定" : `Lv.${level}`}</span>
+          </div>
+          <div className="actual-stat-grid">
+            {STAT_FIELDS.map((field) => {
+              const natureMultiplier = getNatureMultiplier(build.nature, field.key);
+              const modifierClass =
+                natureMultiplier > 1 ? "nature-up" : natureMultiplier < 1 ? "nature-down" : "";
+              const modifierLabel =
+                natureMultiplier > 1 ? "性格↑" : natureMultiplier < 1 ? "性格↓" : "";
+              return (
+                <div className={`actual-stat-cell ${modifierClass}`} key={field.key}>
+                  <span>{field.label}</span>
+                  <strong>{actualStats[field.key]}</strong>
+                  <small>
+                    {field.name}
+                    {modifierLabel && ` ${modifierLabel}`}
+                  </small>
+                </div>
+              );
+            })}
+          </div>
+          <p className="calculation-note">
+            {isChampions
+              ? "チャンピオンズ方式は現在公開されている努力ポイント仕様に基づく計算です。"
+              : "種族値・個体値・努力値・レベル・性格補正から自動計算しています。"}
+          </p>
+        </div>
       </div>
 
       <div className="detail-section">
