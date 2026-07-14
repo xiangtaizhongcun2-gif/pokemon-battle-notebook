@@ -3,6 +3,7 @@ import type { ChangeEvent } from "react";
 export type FieldChangeEvent = ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>;
 
 export type View = "parties" | "pokedex" | "history";
+export type TrainingSystem = "traditional" | "champions";
 export type PokemonType =
   | "ノーマル"
   | "ほのお"
@@ -51,6 +52,7 @@ export type PokemonBuild = {
   teraType: PokemonType;
   moves: [string, string, string, string];
   evs: Stats;
+  trainingSystem?: TrainingSystem;
   memo: string;
 };
 
