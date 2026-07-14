@@ -9,12 +9,15 @@ import "./opponent-team-search.css";
 import "./data-backup.css";
 import "./speed-comparison.css";
 import "./opponent-pokemon-statistics.css";
+import "./selection-statistics.css";
 import { BattleStatistics } from "./simple/BattleStatistics";
 import { OpponentTeamSearch } from "./simple/OpponentTeamSearch";
 import { DataBackupManager } from "./simple/DataBackupManager";
 import { PartyCopyAction } from "./simple/PartyCopyAction";
 import { SpeedComparison } from "./simple/SpeedComparison";
 import { OpponentPokemonStatisticsMount } from "./simple/OpponentPokemonStatisticsMount";
+import { OwnSelectionPicker } from "./simple/OwnSelectionPicker";
+import { SelectionStatistics } from "./simple/SelectionStatistics";
 
 const rootElement = document.getElementById("root");
 
@@ -25,9 +28,11 @@ if (rootElement === null) {
 createRoot(rootElement).render(
   <StrictMode>
     <App />
+    <OwnSelectionPicker />
     <OpponentTeamSearch />
     <BattleStatistics />
     <OpponentPokemonStatisticsMount />
+    <SelectionStatistics />
     <DataBackupManager />
     <PartyCopyAction />
     <SpeedComparison />
