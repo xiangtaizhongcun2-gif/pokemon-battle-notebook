@@ -42,7 +42,7 @@ export function BuildEditor({
 
   const trainingSystem: TrainingSystem = build.trainingSystem ?? "traditional";
   const isChampions = trainingSystem === "champions";
-  const allocationLabel = isChampions ? "努力ポイント" : "努力値";
+  const allocationLabel = isChampions ? "能力ポイント" : "努力値";
   const totalLimit = isChampions ? 66 : 510;
   const perStatLimit = isChampions ? 32 : 252;
   const allocationTotal = Object.values(build.evs).reduce((sum, value) => sum + value, 0);
@@ -154,7 +154,7 @@ export function BuildEditor({
               }
             >
               <option value="traditional">従来作品（努力値）</option>
-              <option value="champions">ポケモンチャンピオンズ（努力ポイント）</option>
+              <option value="champions">ポケモンチャンピオンズ（能力ポイント）</option>
             </select>
           </label>
           <p className="training-rule-note">
@@ -207,7 +207,7 @@ export function BuildEditor({
 
         {isChampions && (
           <p className="champions-calculation-note">
-            実数値はLv.50・個体値31相当を基準に、努力ポイント1につき対象能力へ1を加えて計算します。
+            Lv.50・個体値31固定です。能力ポイントは式の中で2倍し、計算途中で小数が出るたびに切り捨てます。
           </p>
         )}
 
@@ -278,7 +278,7 @@ export function BuildEditor({
           </div>
           <p className="calculation-note">
             {isChampions
-              ? "チャンピオンズ方式は現在公開されている努力ポイント仕様に基づく計算です。"
+              ? "チャンピオンズのLv.50・個体値31固定の計算式を使用しています。"
               : "種族値・個体値・努力値・レベル・性格補正から自動計算しています。"}
           </p>
         </div>
