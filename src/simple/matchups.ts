@@ -22,13 +22,21 @@ const TYPE_CHART: Record<PokemonType, Partial<Record<PokemonType, number>>> = {
   フェアリー: { ほのお: 0.5, かくとう: 2, どく: 0.5, ドラゴン: 2, あく: 2, はがね: 0.5 },
 };
 
+export function getTypeMultiplier(
+  attackingType: PokemonType,
+  defendingTypes: PokemonType[],
+): number {
+  return defendingTypes.reduce(
+    (current, defendingType) => current * (TYPE_CHART[attackingType][defendingType] ?? 1),
+    1,
+  );
+}
+
 export function calculateMatchups(defendingTypes: PokemonType[]): Matchup[] {
-  const values = ALL_TYPES.map((attackingType) => {
-    const multiplier = defendingTypes.reduce((current, defendingType) => {
-      return current * (TYPE_CHART[attackingType][defendingType] ?? 1);
-    }, 1);
-    return { attackingType, multiplier };
-  });
+  const values = ALL_TYPES.map((attackingType) => ({
+    attackingType,
+    multiplier: getTypeMultiplier(attackingType, defendingTypes),
+  }));
 
   return [4, 2, 0.5, 0.25, 0]
     .map((multiplier) => ({
