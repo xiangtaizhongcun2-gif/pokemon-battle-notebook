@@ -65,3 +65,7 @@
 .move-grid .autocomplete-input {
   min-width: 0;
 }
+
+.damage-calculator-page .damage-rolls {
+  display: none;
+}
