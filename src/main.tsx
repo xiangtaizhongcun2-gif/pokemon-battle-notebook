@@ -14,7 +14,7 @@ import { OpponentTeamSearch } from "./simple/OpponentTeamSearch";
 import { DataBackupManager } from "./simple/DataBackupManager";
 import { PartyCopyAction } from "./simple/PartyCopyAction";
 import { SpeedComparison } from "./simple/SpeedComparison";
-import { OpponentPokemonStatistics } from "./simple/OpponentPokemonStatistics";
+import { OpponentPokemonStatisticsMount } from "./simple/OpponentPokemonStatisticsMount";
 
 const rootElement = document.getElementById("root");
 
@@ -27,7 +27,7 @@ createRoot(rootElement).render(
     <App />
     <OpponentTeamSearch />
     <BattleStatistics />
-    <OpponentPokemonStatistics />
+    <OpponentPokemonStatisticsMount />
     <DataBackupManager />
     <PartyCopyAction />
     <SpeedComparison />
