@@ -13,6 +13,7 @@ import "./selection-statistics.css";
 import "./party-analysis.css";
 import "./build-templates.css";
 import "./damage-calculator.css";
+import "./cloud-sync.css";
 import "./pwa.css";
 import { BattleStatistics } from "./simple/BattleStatistics";
 import { OpponentTeamSearch } from "./simple/OpponentTeamSearch";
@@ -27,6 +28,7 @@ import { BuildTemplateManager } from "./simple/BuildTemplateManager";
 import { DamageCalculatorMount } from "./simple/DamageCalculatorMount";
 import { DamageMoveOptionsEnhancer } from "./simple/DamageMoveOptionsEnhancer";
 import { DamageMoveOptionsStyles } from "./simple/DamageMoveOptionsStyles";
+import { CloudSyncManager } from "./simple/CloudSyncManager";
 import { PwaManager } from "./simple/PwaManager";
 import { PwaMetadata } from "./simple/PwaMetadata";
 
@@ -50,6 +52,7 @@ createRoot(rootElement).render(
     <BattleStatistics />
     <OpponentPokemonStatisticsMount />
     <SelectionStatistics />
+    <CloudSyncManager />
     <DataBackupManager />
     <PartyCopyAction />
     <SpeedComparison />

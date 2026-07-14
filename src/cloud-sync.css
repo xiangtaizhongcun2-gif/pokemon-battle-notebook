@@ -1,0 +1,312 @@
+.cloud-sync-launcher {
+  position: fixed;
+  right: 22px;
+  bottom: 76px;
+  z-index: 31;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  border: 1px solid #cfd8d2;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 8px 24px rgba(17, 24, 39, 0.12);
+  padding: 9px 15px;
+  color: #3c4942;
+  font-size: 0.8rem;
+  font-weight: 750;
+  backdrop-filter: blur(12px);
+}
+
+.cloud-sync-launcher:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.cloud-sync-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  flex: 0 0 9px;
+  border-radius: 999px;
+  background: #9ca3af;
+  box-shadow: 0 0 0 3px rgba(156, 163, 175, 0.15);
+}
+
+.cloud-sync-launcher.synced .cloud-sync-dot,
+.cloud-sync-status.synced .cloud-sync-dot {
+  background: #2f7d59;
+  box-shadow: 0 0 0 3px rgba(47, 125, 89, 0.15);
+}
+
+.cloud-sync-launcher.saving .cloud-sync-dot,
+.cloud-sync-launcher.checking .cloud-sync-dot,
+.cloud-sync-status.saving .cloud-sync-dot,
+.cloud-sync-status.checking .cloud-sync-dot {
+  background: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  animation: cloud-sync-pulse 1.25s ease-in-out infinite;
+}
+
+.cloud-sync-launcher.offline .cloud-sync-dot,
+.cloud-sync-status.offline .cloud-sync-dot,
+.cloud-sync-launcher.choice .cloud-sync-dot,
+.cloud-sync-status.choice .cloud-sync-dot {
+  background: #d18a17;
+  box-shadow: 0 0 0 3px rgba(209, 138, 23, 0.16);
+}
+
+.cloud-sync-launcher.error .cloud-sync-dot,
+.cloud-sync-status.error .cloud-sync-dot {
+  background: #c23b31;
+  box-shadow: 0 0 0 3px rgba(194, 59, 49, 0.15);
+}
+
+@keyframes cloud-sync-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.cloud-sync-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  background: rgba(17, 24, 39, 0.48);
+  padding: 24px;
+}
+
+.cloud-sync-dialog {
+  display: grid;
+  gap: 20px;
+  width: min(620px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  border: 1px solid #dbe2de;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 28px 90px rgba(17, 24, 39, 0.28);
+  padding: 26px;
+}
+
+.cloud-sync-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.cloud-sync-heading h2 {
+  margin: 0;
+  font-size: 1.45rem;
+}
+
+.cloud-sync-close {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.cloud-sync-close:hover {
+  border-color: var(--border-strong);
+  color: #111827;
+}
+
+.cloud-sync-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #dfe5e1;
+  border-radius: 12px;
+  background: #f8faf8;
+  padding: 13px 15px;
+}
+
+.cloud-sync-status > div {
+  display: grid;
+  gap: 3px;
+}
+
+.cloud-sync-status strong {
+  font-size: 0.88rem;
+}
+
+.cloud-sync-status small {
+  color: var(--muted);
+  font-size: 0.73rem;
+}
+
+.cloud-sync-status.error {
+  border-color: #f0c5c1;
+  background: #fff4f3;
+}
+
+.cloud-sync-status.offline,
+.cloud-sync-status.choice {
+  border-color: #ead6a8;
+  background: #fff9ea;
+}
+
+.cloud-sync-setup,
+.cloud-sync-signed-out,
+.cloud-sync-account,
+.cloud-sync-choice {
+  display: grid;
+  gap: 16px;
+}
+
+.cloud-sync-setup p,
+.cloud-sync-signed-out p,
+.cloud-sync-choice p,
+.cloud-sync-footer-note {
+  margin: 0;
+  color: #56635c;
+  font-size: 0.85rem;
+  line-height: 1.65;
+}
+
+.cloud-sync-setup ol {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 22px;
+  color: #3c4942;
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.cloud-sync-note {
+  border-radius: 10px;
+  background: #f5f7f5;
+  padding: 11px 13px;
+}
+
+.cloud-sync-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #e0e6e2;
+  border-radius: 13px;
+  background: #fbfcfb;
+  padding: 13px;
+}
+
+.cloud-sync-avatar {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.cloud-sync-user > div:last-child {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cloud-sync-user span {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cloud-sync-choice h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.cloud-sync-choice-card {
+  display: grid;
+  gap: 10px;
+  border: 1px solid #dfe5e1;
+  border-radius: 13px;
+  background: #fff;
+  padding: 16px;
+}
+
+.cloud-sync-choice-card > span,
+.cloud-sync-choice-card > small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.cloud-sync-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.cloud-sync-signout {
+  justify-self: start;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  padding: 7px 9px;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.cloud-sync-signout:hover {
+  background: #f3f5f3;
+  color: #374151;
+}
+
+.cloud-sync-footer-note {
+  border-top: 1px solid #e3e8e5;
+  padding-top: 16px;
+  font-size: 0.76rem;
+}
+
+@media (max-width: 640px) {
+  .cloud-sync-launcher {
+    right: 12px;
+    bottom: calc(68px + env(safe-area-inset-bottom));
+    min-height: 40px;
+    padding: 8px 13px;
+  }
+
+  .cloud-sync-overlay {
+    align-items: end;
+    padding: 0;
+  }
+
+  .cloud-sync-dialog {
+    width: 100%;
+    max-height: min(88vh, 760px);
+    border-radius: 20px 20px 0 0;
+    padding: 22px 18px calc(22px + env(safe-area-inset-bottom));
+  }
+
+  .cloud-sync-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud-sync-dot {
+    animation: none !important;
+  }
+}
