@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./style.css";
 import "./battle-statistics.css";
+import "./build-suggestions.css";
 import { BattleStatistics } from "./simple/BattleStatistics";
 
 const rootElement = document.getElementById("root");
