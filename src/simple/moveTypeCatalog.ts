@@ -5,7 +5,7 @@ const CSV_BASE_URLS = [
   "https://cdn.jsdelivr.net/gh/PokeAPI/pokeapi@master/data/v2/csv",
   "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv",
 ];
-const CACHE_KEY = "pokemon-battle-notebook.move-type-catalog.v2";
+const CACHE_KEY = "pokemon-battle-notebook.move-type-catalog.v3";
 const CACHE_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 const JAPANESE_LANGUAGE_ID = "1";
 
@@ -57,10 +57,10 @@ const FALLBACK_MOVES: Record<string, MoveMetadata> = {
   シャドーボール: fallback("シャドーボール", "ゴースト", "special", 80),
   ムーンフォース: fallback("ムーンフォース", "フェアリー", "special", 95),
   テラバースト: fallback("テラバースト", "ノーマル", "special", 80),
-  まもる: fallback("まもる", "ノーマル", "status", null),
-  りゅうのまい: fallback("りゅうのまい", "ドラゴン", "status", null),
-  つるぎのまい: fallback("つるぎのまい", "ノーマル", "status", null),
-  ステルスロック: fallback("ステルスロック", "いわ", "status", null),
+  まもる: fallback("まもる", "ノーマル", "status", 0),
+  りゅうのまい: fallback("りゅうのまい", "ドラゴン", "status", 0),
+  つるぎのまい: fallback("つるぎのまい", "ノーマル", "status", 0),
+  ステルスロック: fallback("ステルスロック", "いわ", "status", 0),
 };
 
 function normalize(value: string): string {
@@ -179,7 +179,7 @@ async function loadMoveCatalog(signal: AbortSignal): Promise<StoredMoveCatalog> 
       name,
       type,
       category,
-      power: row.power && Number.isFinite(parsedPower) ? parsedPower : null,
+      power: category === "status" ? 0 : row.power && Number.isFinite(parsedPower) ? parsedPower : null,
     };
   });
 
