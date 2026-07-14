@@ -5,7 +5,9 @@ import "./style.css";
 import "./battle-statistics.css";
 import "./build-suggestions.css";
 import "./champions-training.css";
+import "./opponent-team-search.css";
 import { BattleStatistics } from "./simple/BattleStatistics";
+import { OpponentTeamSearch } from "./simple/OpponentTeamSearch";
 
 const rootElement = document.getElementById("root");
 
@@ -16,6 +18,7 @@ if (rootElement === null) {
 createRoot(rootElement).render(
   <StrictMode>
     <App />
+    <OpponentTeamSearch />
     <BattleStatistics />
   </StrictMode>,
 );
