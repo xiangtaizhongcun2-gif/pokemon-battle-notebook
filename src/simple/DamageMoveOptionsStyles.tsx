@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 const styles = `
 .damage-move-options-host { min-width: 0; }
 .damage-move-options-panel {
@@ -54,6 +56,41 @@ const styles = `
 }
 `;
 
+const RANGE_PATTERN = /^(\d+(?:\.\d+)?)\s*[〜~～-]\s*(\d+(?:\.\d+)?)$/;
+const PERCENT_RANGE_PATTERN = /^(\d+(?:\.\d+)?)%\s*[〜~～-]\s*(\d+(?:\.\d+)?)%$/;
+
+function formatDamageRange(): void {
+  const values = document.querySelectorAll<HTMLElement>(
+    ".damage-calculator-page .damage-result-summary > div strong",
+  );
+  const damageValue = values[0];
+  const percentValue = values[1];
+
+  const damageMatch = damageValue?.textContent?.trim().match(RANGE_PATTERN);
+  if (damageValue && damageMatch) {
+    damageValue.textContent = `最小値 ${damageMatch[1]} ～ 最大値 ${damageMatch[2]}`;
+  }
+
+  const percentMatch = percentValue?.textContent?.trim().match(PERCENT_RANGE_PATTERN);
+  if (percentValue && percentMatch) {
+    percentValue.textContent = `最小 ${percentMatch[1]}% ～ 最大 ${percentMatch[2]}%`;
+  }
+}
+
 export function DamageMoveOptionsStyles() {
+  useEffect(() => {
+    const refresh = () => window.requestAnimationFrame(formatDamageRange);
+    refresh();
+
+    const observer = new MutationObserver(refresh);
+    observer.observe(document.getElementById("root") ?? document.body, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return <style>{styles}</style>;
 }
