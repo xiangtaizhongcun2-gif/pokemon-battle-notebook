@@ -28,6 +28,141 @@
   border-color: var(--danger);
 }
 
+.stat-calculation-settings {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 20px;
+  align-items: end;
+  margin: 20px 0 24px;
+  border-radius: 10px;
+  background: var(--soft);
+  padding: 16px;
+}
+
+.level-field input {
+  text-align: center;
+}
+
+.stat-subheading {
+  margin-bottom: 8px;
+}
+
+.stat-subheading h3,
+.actual-stat-heading h3 {
+  margin: 0;
+}
+
+.stat-subheading span,
+.actual-stat-heading span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.iv-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.iv-grid label {
+  text-align: center;
+}
+
+.iv-grid input {
+  padding-inline: 6px;
+  text-align: center;
+}
+
+.champions-calculation-note,
+.calculation-note {
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.champions-calculation-note {
+  margin: 18px 0 22px;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 10px 12px;
+}
+
+.actual-stat-panel {
+  margin-top: 24px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  padding: 16px;
+}
+
+.actual-stat-heading {
+  margin-bottom: 12px;
+}
+
+.actual-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.actual-stat-cell {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 6px;
+  text-align: center;
+}
+
+.actual-stat-cell > span {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.actual-stat-cell strong {
+  font-size: 1.2rem;
+}
+
+.actual-stat-cell small {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.65rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actual-stat-cell.nature-up {
+  border-color: #b8d8c8;
+  background: var(--accent-soft);
+}
+
+.actual-stat-cell.nature-down {
+  border-color: #f0c6c0;
+  background: #fef4f2;
+}
+
+.calculation-note {
+  margin: 12px 0 0;
+}
+
+@media (max-width: 720px) {
+  .stat-calculation-settings {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .level-field {
+    max-width: 160px;
+  }
+
+  .iv-grid,
+  .actual-stat-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 560px) {
   .training-system-row {
     grid-template-columns: 1fr;
@@ -35,6 +170,10 @@
   }
 
   .training-system-row label {
+    max-width: none;
+  }
+
+  .level-field {
     max-width: none;
   }
 }
