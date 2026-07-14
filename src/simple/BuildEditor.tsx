@@ -2,6 +2,8 @@ import { ALL_TYPES, NATURES } from "./data";
 import type { FieldChangeEvent, PokemonBuild, PokemonEntry, PokemonType, Stats } from "./model";
 import { MatchupList, TypeBadge } from "./Shared";
 import { getPokemon } from "./storage";
+import { AutocompleteInput } from "./AutocompleteInput";
+import { useBuildSuggestions } from "./suggestions";
 
 export function BuildEditor({
   build,
@@ -15,6 +17,9 @@ export function BuildEditor({
   onDelete: (buildId: string) => void;
 }) {
   const pokemon = getPokemon(build.speciesId, pokedex);
+  const { moveOptions, itemOptions, status: suggestionStatus, statusText } = useBuildSuggestions(
+    build.speciesId,
+  );
   if (!pokemon) return null;
 
   const evTotal = Object.values(build.evs).reduce((sum, value) => sum + value, 0);
@@ -47,21 +52,23 @@ export function BuildEditor({
       <div className="form-grid">
         <label>
           特性
-          <select
+          <AutocompleteInput
+            ariaLabel="特性"
             value={build.ability}
-            onChange={(event: FieldChangeEvent) => onChange(build.id, { ability: event.target.value })}
-          >
-            {pokemon.abilities.map((ability) => (
-              <option key={ability}>{ability}</option>
-            ))}
-          </select>
+            options={pokemon.abilities}
+            placeholder="特性名を入力"
+            emptyMessage="このポケモンに登録された特性候補はありません。"
+            onChange={(ability) => onChange(build.id, { ability })}
+          />
         </label>
         <label>
           持ち物
-          <input
+          <AutocompleteInput
+            ariaLabel="持ち物"
             value={build.item}
-            onChange={(event: FieldChangeEvent) => onChange(build.id, { item: event.target.value })}
+            options={itemOptions}
             placeholder="例：こだわりスカーフ"
+            onChange={(item) => onChange(build.id, { item })}
           />
         </label>
         <label>
@@ -94,19 +101,23 @@ export function BuildEditor({
         <h3>技</h3>
         <div className="move-grid">
           {build.moves.map((move, index) => (
-            <input
-              aria-label={`技${index + 1}`}
+            <AutocompleteInput
+              ariaLabel={`技${index + 1}`}
               key={index}
               value={move}
+              options={moveOptions}
               placeholder={`技${index + 1}`}
-              onChange={(event: FieldChangeEvent) => {
+              onChange={(value) => {
                 const moves = [...build.moves] as PokemonBuild["moves"];
-                moves[index] = event.target.value;
+                moves[index] = value;
                 onChange(build.id, { moves });
               }}
             />
           ))}
         </div>
+        <p className={`suggestion-status ${suggestionStatus}`} role="status">
+          {statusText}
+        </p>
       </div>
 
       <div className="detail-section">
