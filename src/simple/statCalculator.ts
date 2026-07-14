@@ -76,6 +76,27 @@ function calculateTraditionalStat({
   return Math.floor((scaledValue + 5) * natureMultiplier);
 }
 
+function calculateChampionsStat({
+  baseStat,
+  effortPoints,
+  natureMultiplier,
+  isHp,
+}: {
+  baseStat: number;
+  effortPoints: number;
+  natureMultiplier: number;
+  isHp: boolean;
+}): number {
+  if (isHp && baseStat === 1) return 1;
+
+  const scaledValue = Math.floor(
+    ((2 * baseStat + 31 + clamp(effortPoints, 0, 32) * 2) * 50) / 100,
+  );
+
+  if (isHp) return scaledValue + 60;
+  return Math.floor((scaledValue + 5) * natureMultiplier);
+}
+
 export function calculateActualStats(pokemon: PokemonEntry, build: PokemonBuild): Stats {
   const trainingSystem = build.trainingSystem ?? "traditional";
   const level = clamp(build.level ?? DEFAULT_LEVEL, 1, 100);
@@ -87,16 +108,15 @@ export function calculateActualStats(pokemon: PokemonEntry, build: PokemonBuild)
       const isHp = key === "hp";
 
       if (trainingSystem === "champions") {
-        const level50BaseStat = calculateTraditionalStat({
-          baseStat: pokemon.stats[key],
-          iv: 31,
-          ev: 0,
-          level: 50,
-          natureMultiplier,
-          isHp,
-        });
-        const effortPointBonus = pokemon.stats.hp === 1 && isHp ? 0 : Math.max(0, build.evs[key]);
-        return [key, level50BaseStat + effortPointBonus];
+        return [
+          key,
+          calculateChampionsStat({
+            baseStat: pokemon.stats[key],
+            effortPoints: build.evs[key],
+            natureMultiplier,
+            isHp,
+          }),
+        ];
       }
 
       return [
