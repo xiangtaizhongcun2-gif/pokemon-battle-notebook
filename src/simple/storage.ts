@@ -35,8 +35,11 @@ export function createId(prefix: string): string {
   return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
-export function getPokemon(speciesId: string): PokemonEntry | undefined {
-  return POKEDEX.find((pokemon) => pokemon.id === speciesId);
+export function getPokemon(
+  speciesId: string,
+  pokedex: PokemonEntry[] = POKEDEX,
+): PokemonEntry | undefined {
+  return pokedex.find((pokemon) => pokemon.id === speciesId);
 }
 
 export function useStoredState(): [AppState, Dispatch<SetStateAction<AppState>>] {
