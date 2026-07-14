@@ -19,3 +19,10 @@ export type {
   TypeChartId,
   UserSettingId,
 } from "./ids";
+
+export type {
+  PokemonType,
+  TypeChart,
+  TypeChartEntry,
+  TypeEffectiveness,
+} from "./type-chart";
