@@ -1,18 +1,20 @@
 import { ALL_TYPES, NATURES } from "./data";
-import type { FieldChangeEvent, PokemonBuild, PokemonType, Stats } from "./model";
+import type { FieldChangeEvent, PokemonBuild, PokemonEntry, PokemonType, Stats } from "./model";
 import { MatchupList, TypeBadge } from "./Shared";
 import { getPokemon } from "./storage";
 
 export function BuildEditor({
   build,
+  pokedex,
   onChange,
   onDelete,
 }: {
   build: PokemonBuild;
+  pokedex: PokemonEntry[];
   onChange: (buildId: string, patch: Partial<PokemonBuild>) => void;
   onDelete: (buildId: string) => void;
 }) {
-  const pokemon = getPokemon(build.speciesId);
+  const pokemon = getPokemon(build.speciesId, pokedex);
   if (!pokemon) return null;
 
   const evTotal = Object.values(build.evs).reduce((sum, value) => sum + value, 0);
