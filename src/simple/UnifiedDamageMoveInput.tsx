@@ -1,5 +1,11 @@
 import { useEffect } from "react";
 
+const MAX_VISIBLE_OPTIONS = 24;
+
+function normalize(value: string): string {
+  return value.normalize("NFKC").trim().toLocaleLowerCase("ja");
+}
+
 function setReactInputValue(input: HTMLInputElement, value: string): void {
   const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set;
   if (setter) setter.call(input, value);
@@ -38,47 +44,127 @@ export function UnifiedDamageMoveInput() {
       wrapper.className = "unified-damage-move-field";
       wrapper.textContent = "技";
 
+      const inputWrap = document.createElement("div");
+      inputWrap.className = "unified-damage-move-input-wrap";
+
       const input = document.createElement("input");
-      const list = document.createElement("datalist");
-      const listId = `damage-move-list-${Math.random().toString(36).slice(2)}`;
-      input.setAttribute("list", listId);
+      input.type = "search";
       input.setAttribute("autocomplete", "off");
+      input.setAttribute("autocapitalize", "none");
+      input.setAttribute("spellcheck", "false");
       input.setAttribute("placeholder", "技名を入力または候補から選択");
+      input.setAttribute("aria-autocomplete", "list");
+      input.setAttribute("aria-expanded", "false");
       input.value = nativeInput.value;
-      list.id = listId;
+
+      const list = document.createElement("div");
+      list.className = "unified-damage-move-list";
+      list.setAttribute("role", "listbox");
+      list.hidden = true;
+
+      let optionValues: string[] = [];
+      let closeTimer: number | null = null;
+
+      const closeList = () => {
+        list.hidden = true;
+        input.setAttribute("aria-expanded", "false");
+      };
+
+      const chooseValue = (value: string) => {
+        input.value = value;
+        setReactInputValue(nativeInput, value);
+        closeList();
+        input.focus({ preventScroll: true });
+      };
+
+      const renderList = () => {
+        const query = normalize(input.value);
+        const matches = optionValues
+          .filter((value) => !query || normalize(value).includes(query))
+          .slice(0, MAX_VISIBLE_OPTIONS);
+
+        list.replaceChildren();
+        if (matches.length === 0) {
+          const empty = document.createElement("p");
+          empty.className = "unified-damage-move-empty";
+          empty.textContent = "一致する技がありません";
+          list.append(empty);
+        } else {
+          const fragment = document.createDocumentFragment();
+          for (const value of matches) {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "unified-damage-move-option";
+            button.setAttribute("role", "option");
+            button.textContent = value;
+            button.addEventListener("pointerdown", (event) => {
+              event.preventDefault();
+              chooseValue(value);
+            });
+            fragment.append(button);
+          }
+          list.append(fragment);
+        }
+
+        list.hidden = false;
+        input.setAttribute("aria-expanded", "true");
+      };
 
       const syncOptions = () => {
-        const values = Array.from(select.options)
+        optionValues = Array.from(select.options)
           .map((option) => option.value.trim())
           .filter(Boolean);
-        list.replaceChildren(
-          ...values.map((value) => {
-            const option = document.createElement("option");
-            option.value = value;
-            return option;
-          }),
-        );
         if (document.activeElement !== input && input.value !== nativeInput.value) {
           input.value = nativeInput.value;
         }
       };
 
-      const handleInput = () => setReactInputValue(nativeInput, input.value);
+      const handleInput = () => {
+        setReactInputValue(nativeInput, input.value);
+        renderList();
+      };
+      const handleFocus = () => {
+        if (closeTimer !== null) window.clearTimeout(closeTimer);
+        renderList();
+      };
+      const handleBlur = () => {
+        closeTimer = window.setTimeout(closeList, 120);
+      };
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === "Escape") closeList();
+        if (event.key === "Enter") {
+          const first = list.querySelector<HTMLButtonElement>(".unified-damage-move-option");
+          if (first && !list.hidden) {
+            event.preventDefault();
+            chooseValue(first.textContent ?? "");
+          }
+        }
+      };
+
       input.addEventListener("input", handleInput);
       input.addEventListener("change", handleInput);
-      wrapper.append(input, list);
+      input.addEventListener("focus", handleFocus);
+      input.addEventListener("blur", handleBlur);
+      input.addEventListener("keydown", handleKeyDown);
+      inputWrap.append(input, list);
+      wrapper.append(inputWrap);
       selectLabel.insertAdjacentElement("afterend", wrapper);
       syncOptions();
 
-      const observer = new MutationObserver(syncOptions);
+      const observer = new MutationObserver(() => {
+        syncOptions();
+        if (document.activeElement === input) renderList();
+      });
       observer.observe(select, { childList: true, subtree: true, attributes: true });
-      const interval = window.setInterval(syncOptions, 300);
 
       cleanupCurrent = () => {
         observer.disconnect();
-        window.clearInterval(interval);
+        if (closeTimer !== null) window.clearTimeout(closeTimer);
         input.removeEventListener("input", handleInput);
         input.removeEventListener("change", handleInput);
+        input.removeEventListener("focus", handleFocus);
+        input.removeEventListener("blur", handleBlur);
+        input.removeEventListener("keydown", handleKeyDown);
         wrapper.remove();
         selectLabel.classList.remove("damage-move-source-hidden");
         nativeLabel.classList.remove("damage-move-native-hidden");
