@@ -15,6 +15,7 @@ import "./build-templates.css";
 import "./damage-calculator.css";
 import "./cloud-sync.css";
 import "./pwa.css";
+import "./mobile-party.css";
 import { BattleStatistics } from "./simple/BattleStatistics";
 import { OpponentTeamSearch } from "./simple/OpponentTeamSearch";
 import { DataBackupManager } from "./simple/DataBackupManager";
