@@ -14,6 +14,15 @@
     ],
     "headers": [
       {
+        "source": "/index.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      },
+      {
         "source": "/sw.js",
         "headers": [
           {
@@ -32,7 +41,7 @@
         ]
       },
       {
-        "source": "**/*.@(js|css|svg|png|jpg|jpeg|webp|woff|woff2)",
+        "source": "/assets/**",
         "headers": [
           {
             "key": "Cache-Control",
