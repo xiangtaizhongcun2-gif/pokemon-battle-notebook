@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import type { KeyboardEvent } from "react";
+import type { KeyboardEvent, PointerEvent } from "react";
 import type { PokemonEntry } from "./model";
 import { usePokedex } from "./pokedex";
 
@@ -198,7 +198,7 @@ export function OpponentTeamSearch() {
   const addPokemon = (pokemon: PokemonEntry) => {
     if (selectedPokemon.length >= MAX_OPPONENT_POKEMON) return;
 
-    const tokens = splitTeamText(teamText);
+    const tokens = splitTeamText(teamTextRef.current);
     if (tokens.some((token) => matchesToken(pokemon, token))) return;
 
     updateTeam([...tokens, pokemon.name]);
@@ -206,7 +206,7 @@ export function OpponentTeamSearch() {
   };
 
   const removePokemon = (pokemon: PokemonEntry) => {
-    const tokens = splitTeamText(teamText).filter((token) => !matchesToken(pokemon, token));
+    const tokens = splitTeamText(teamTextRef.current).filter((token) => !matchesToken(pokemon, token));
     updateTeam(tokens);
   };
 
@@ -214,6 +214,12 @@ export function OpponentTeamSearch() {
     if (event.key !== "Enter" || searchResults.length === 0) return;
     event.preventDefault();
     addPokemon(searchResults[0]);
+  };
+
+  const handleCandidatePointerDown = (event: PointerEvent<HTMLButtonElement>, pokemon: PokemonEntry) => {
+    event.preventDefault();
+    event.stopPropagation();
+    addPokemon(pokemon);
   };
 
   if (!portalTarget || !textarea) return null;
@@ -270,6 +276,7 @@ export function OpponentTeamSearch() {
                 role="option"
                 aria-selected="false"
                 key={pokemon.id}
+                onPointerDown={(event) => handleCandidatePointerDown(event, pokemon)}
                 onClick={() => addPokemon(pokemon)}
               >
                 <span className="opponent-result-number">No.{String(pokemon.number).padStart(4, "0")}</span>
