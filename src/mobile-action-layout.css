@@ -1,0 +1,81 @@
+@media (max-width: 640px) {
+  .party-editor > .inline-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .party-editor > .inline-heading .title-input {
+    min-width: 0;
+    width: 100%;
+    font-size: 1.35rem;
+  }
+
+  .party-editor > .inline-heading .text-button,
+  .party-editor > .inline-heading .danger-text-button {
+    flex: 0 0 auto;
+    min-height: 40px;
+    border-radius: 8px;
+    padding: 8px 10px;
+    white-space: nowrap;
+  }
+
+  .party-editor > .inline-heading .text-button {
+    background: var(--accent-soft);
+  }
+
+  .party-editor > .inline-heading .danger-text-button {
+    background: #fef0ee;
+  }
+
+  .page {
+    padding-bottom: calc(150px + env(safe-area-inset-bottom));
+  }
+
+  .cloud-sync-launcher,
+  .data-backup-launcher {
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    width: calc(50vw - 18px);
+    min-height: 46px;
+    justify-content: center;
+    border-radius: 12px;
+    padding: 9px 10px;
+    text-align: center;
+    box-shadow: 0 8px 22px rgba(17, 24, 39, 0.14);
+  }
+
+  .cloud-sync-launcher {
+    left: 12px;
+    right: auto;
+  }
+
+  .data-backup-launcher {
+    left: calc(50vw + 6px);
+    right: auto;
+  }
+
+  .pwa-install-button {
+    left: 12px;
+    right: 12px;
+    bottom: calc(70px + env(safe-area-inset-bottom));
+    justify-content: center;
+    width: auto;
+    min-height: 46px;
+    border-radius: 12px;
+  }
+
+  .pwa-update-toast {
+    bottom: calc(124px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 380px) {
+  .party-editor > .inline-heading {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .party-editor > .inline-heading .title-input {
+    grid-column: 1 / -1;
+  }
+}
