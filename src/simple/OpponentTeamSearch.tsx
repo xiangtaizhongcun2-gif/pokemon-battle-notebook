@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { KeyboardEvent } from "react";
 import type { PokemonEntry } from "./model";
@@ -34,14 +34,17 @@ function getSelectedPokemon(value: string, pokedex: PokemonEntry[]): PokemonEntr
   return [...selected.values()].slice(0, MAX_OPPONENT_POKEMON);
 }
 
-function writeTextareaValue(textarea: HTMLTextAreaElement, tokens: string[]): void {
-  const value = tokens.join("、");
+function writeTextareaValue(textarea: HTMLTextAreaElement, value: string): void {
   const setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value")?.set;
 
   if (setter) setter.call(textarea, value);
   else textarea.value = value;
 
-  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+  const inputEvent = typeof InputEvent === "function"
+    ? new InputEvent("input", { bubbles: true, inputType: "insertText", data: null })
+    : new Event("input", { bubbles: true });
+
+  textarea.dispatchEvent(inputEvent);
   textarea.dispatchEvent(new Event("change", { bubbles: true }));
 }
 
@@ -51,6 +54,11 @@ export function OpponentTeamSearch() {
   const [textarea, setTextarea] = useState<HTMLTextAreaElement | null>(null);
   const [teamText, setTeamText] = useState("");
   const [search, setSearch] = useState("");
+  const teamTextRef = useRef("");
+
+  useEffect(() => {
+    teamTextRef.current = teamText;
+  }, [teamText]);
 
   useEffect(() => {
     let host: HTMLDivElement | null = null;
@@ -88,6 +96,7 @@ export function OpponentTeamSearch() {
       setTextarea(nextTextarea);
       setPortalTarget(host);
       setTeamText(nextTextarea.value);
+      teamTextRef.current = nextTextarea.value;
       setSearch("");
     };
 
@@ -107,7 +116,10 @@ export function OpponentTeamSearch() {
   useEffect(() => {
     if (!textarea) return;
 
-    const syncFromTextarea = () => setTeamText(textarea.value);
+    const syncFromTextarea = () => {
+      teamTextRef.current = textarea.value;
+      setTeamText(textarea.value);
+    };
     syncFromTextarea();
     textarea.addEventListener("input", syncFromTextarea);
     textarea.addEventListener("change", syncFromTextarea);
@@ -115,6 +127,48 @@ export function OpponentTeamSearch() {
     return () => {
       textarea.removeEventListener("input", syncFromTextarea);
       textarea.removeEventListener("change", syncFromTextarea);
+    };
+  }, [textarea]);
+
+  useEffect(() => {
+    if (!textarea) return;
+    const form = textarea.closest("form");
+    if (!form) return;
+
+    const flushValue = () => {
+      const value = teamTextRef.current;
+      if (textarea.value !== value) writeTextareaValue(textarea, value);
+      else {
+        const setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value")?.set;
+        if (setter) {
+          setter.call(textarea, `${value} `);
+          textarea.dispatchEvent(new Event("input", { bubbles: true }));
+          setter.call(textarea, value);
+          textarea.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+      }
+    };
+
+    const handlePointerDown = (event: Event) => {
+      const target = event.target instanceof Element ? event.target.closest("button, input") : null;
+      if (!target || !form.contains(target)) return;
+
+      const isSubmitControl =
+        (target instanceof HTMLButtonElement && (target.type === "submit" || /保存|記録/.test(target.textContent ?? ""))) ||
+        (target instanceof HTMLInputElement && target.type === "submit");
+
+      if (isSubmitControl) flushValue();
+    };
+
+    const handleSubmit = () => flushValue();
+    form.addEventListener("pointerdown", handlePointerDown, true);
+    form.addEventListener("touchstart", handlePointerDown, true);
+    form.addEventListener("submit", handleSubmit, true);
+
+    return () => {
+      form.removeEventListener("pointerdown", handlePointerDown, true);
+      form.removeEventListener("touchstart", handlePointerDown, true);
+      form.removeEventListener("submit", handleSubmit, true);
     };
   }, [textarea]);
 
@@ -135,8 +189,10 @@ export function OpponentTeamSearch() {
 
   const updateTeam = (tokens: string[]) => {
     if (!textarea) return;
-    writeTextareaValue(textarea, tokens);
-    setTeamText(tokens.join("、"));
+    const value = tokens.join("、");
+    teamTextRef.current = value;
+    writeTextareaValue(textarea, value);
+    setTeamText(value);
   };
 
   const addPokemon = (pokemon: PokemonEntry) => {
