@@ -39,6 +39,11 @@
   font-weight: 750;
 }
 
+.unified-damage-move-input-wrap {
+  position: relative;
+  min-width: 0;
+}
+
 .unified-damage-move-field input {
   width: 100%;
   min-height: 48px;
@@ -50,11 +55,67 @@
   font: inherit;
   font-size: 0.95rem;
   font-weight: 650;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.unified-damage-move-field input::-webkit-search-cancel-button {
+  opacity: 0.65;
 }
 
 .unified-damage-move-field input:focus {
   outline: 2px solid rgba(47, 111, 87, 0.18);
   border-color: var(--accent);
+}
+
+.unified-damage-move-list {
+  position: absolute;
+  z-index: 160;
+  top: calc(100% + 6px);
+  right: 0;
+  left: 0;
+  max-height: min(280px, 38vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 14px 34px rgba(17, 24, 39, 0.18);
+  padding: 6px;
+}
+
+.unified-damage-move-list[hidden] {
+  display: none;
+}
+
+.unified-damage-move-option {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  padding: 10px 12px;
+  color: var(--text-strong);
+  font-size: 0.9rem;
+  font-weight: 650;
+  text-align: left;
+  touch-action: manipulation;
+}
+
+.unified-damage-move-option:hover,
+.unified-damage-move-option:focus-visible {
+  background: var(--accent-soft);
+  outline: none;
+}
+
+.unified-damage-move-empty {
+  margin: 0;
+  padding: 12px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 600;
 }
 
 @media (max-width: 640px) {
@@ -68,5 +129,9 @@
 
   .damage-move-options-note {
     margin-top: 2px;
+  }
+
+  .unified-damage-move-list {
+    max-height: min(240px, 34vh);
   }
 }
