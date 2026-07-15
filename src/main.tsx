@@ -18,6 +18,7 @@ import "./pwa.css";
 import "./mobile-party.css";
 import "./mobile-party-hotfix.css";
 import "./mobile-action-layout.css";
+import "./unified-actions-and-move.css";
 import { BattleStatistics } from "./simple/BattleStatistics";
 import { OpponentTeamSearch } from "./simple/OpponentTeamSearch";
 import { DataBackupManager } from "./simple/DataBackupManager";
@@ -31,6 +32,7 @@ import { BuildTemplateManager } from "./simple/BuildTemplateManager";
 import { DamageCalculatorMount } from "./simple/DamageCalculatorMount";
 import { DamageMoveOptionsEnhancer } from "./simple/DamageMoveOptionsEnhancer";
 import { DamageMoveOptionsStyles } from "./simple/DamageMoveOptionsStyles";
+import { UnifiedDamageMoveInput } from "./simple/UnifiedDamageMoveInput";
 import { CloudSyncManager } from "./simple/CloudSyncManager";
 import { MobileCloudAuthFix } from "./simple/MobileCloudAuthFix";
 import { PwaManager } from "./simple/PwaManager";
@@ -50,6 +52,7 @@ createRoot(rootElement).render(
     <DamageMoveOptionsStyles />
     <DamageCalculatorMount />
     <DamageMoveOptionsEnhancer />
+    <UnifiedDamageMoveInput />
     <BuildTemplateManager />
     <OwnSelectionPicker />
     <OpponentTeamSearch />
