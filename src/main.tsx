@@ -31,6 +31,7 @@ import { DamageCalculatorMount } from "./simple/DamageCalculatorMount";
 import { DamageMoveOptionsEnhancer } from "./simple/DamageMoveOptionsEnhancer";
 import { DamageMoveOptionsStyles } from "./simple/DamageMoveOptionsStyles";
 import { CloudSyncManager } from "./simple/CloudSyncManager";
+import { MobileCloudAuthFix } from "./simple/MobileCloudAuthFix";
 import { PwaManager } from "./simple/PwaManager";
 import { PwaMetadata } from "./simple/PwaMetadata";
 
@@ -54,6 +55,7 @@ createRoot(rootElement).render(
     <BattleStatistics />
     <OpponentPokemonStatisticsMount />
     <SelectionStatistics />
+    <MobileCloudAuthFix />
     <CloudSyncManager />
     <DataBackupManager />
     <PartyCopyAction />
