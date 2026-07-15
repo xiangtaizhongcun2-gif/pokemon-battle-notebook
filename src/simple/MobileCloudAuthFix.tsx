@@ -9,6 +9,10 @@ function isMobileDevice(): boolean {
   );
 }
 
+function isFirebaseAppHostingOrigin(): boolean {
+  return window.location.hostname.endsWith(".firebaseapp.com");
+}
+
 function authErrorMessage(error: unknown): string {
   const code =
     typeof error === "object" && error !== null && "code" in error
@@ -24,13 +28,22 @@ function authErrorMessage(error: unknown): string {
   if (code === "auth/unauthorized-domain") {
     return "この公開URLがFirebaseの認証済みドメインに登録されていません。";
   }
+  if (code === "auth/network-request-failed") {
+    return "Googleログインの通信に失敗しました。通信環境を確認して、もう一度お試しください。";
+  }
   if (error instanceof Error) return error.message;
   return "Googleログインに失敗しました。";
 }
 
 export function MobileCloudAuthFix() {
   useEffect(() => {
-    if (!isFirebaseConfigured || !isMobileDevice()) return;
+    if (
+      !isFirebaseConfigured ||
+      !isMobileDevice() ||
+      isFirebaseAppHostingOrigin()
+    ) {
+      return;
+    }
 
     let signingIn = false;
 
