@@ -1,0 +1,88 @@
+@media (max-width: 820px) {
+  html,
+  body,
+  #root,
+  .app-shell {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .party-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .party-layout > .party-list,
+  .party-layout > .party-editor {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .party-list {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden;
+    padding-bottom: 8px;
+  }
+
+  .party-list-item {
+    flex: 0 0 min(76vw, 320px) !important;
+    width: auto !important;
+    max-width: min(76vw, 320px) !important;
+  }
+
+  .party-editor {
+    overflow: visible !important;
+  }
+
+  .party-editor > .inline-heading,
+  .build-editor > .inline-heading {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .member-grid,
+  .form-grid,
+  .move-grid,
+  .iv-grid,
+  .ev-grid,
+  .actual-stat-grid {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .party-editor {
+    padding: 14px !important;
+  }
+
+  .party-editor > .inline-heading {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+  }
+
+  .member-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .member-card {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .member-card.empty small {
+    writing-mode: horizontal-tb !important;
+    word-break: keep-all;
+  }
+
+  .cloud-sync-launcher,
+  .data-backup-launcher {
+    right: 12px !important;
+    max-width: calc(100vw - 24px);
+  }
+}
