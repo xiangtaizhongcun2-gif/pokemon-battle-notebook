@@ -1,12 +1,15 @@
 @media (max-width: 640px) {
   .party-editor > .inline-heading {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) 88px;
+    grid-template-rows: repeat(2, 40px);
     align-items: center;
-    gap: 8px;
+    gap: 8px 10px;
   }
 
   .party-editor > .inline-heading .title-input {
+    grid-column: 1;
+    grid-row: 1 / 3;
     min-width: 0;
     width: 100%;
     font-size: 1.35rem;
@@ -14,18 +17,23 @@
 
   .party-editor > .inline-heading .text-button,
   .party-editor > .inline-heading .danger-text-button {
-    flex: 0 0 auto;
+    grid-column: 2;
+    width: 88px;
+    min-width: 88px;
+    height: 40px;
     min-height: 40px;
-    border-radius: 8px;
-    padding: 8px 10px;
+    border-radius: 10px;
+    padding: 0 10px;
     white-space: nowrap;
   }
 
   .party-editor > .inline-heading .text-button {
+    grid-row: 1;
     background: var(--accent-soft);
   }
 
   .party-editor > .inline-heading .danger-text-button {
+    grid-row: 2;
     background: #fef0ee;
   }
 
@@ -72,10 +80,12 @@
 
 @media (max-width: 380px) {
   .party-editor > .inline-heading {
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) 80px;
   }
 
-  .party-editor > .inline-heading .title-input {
-    grid-column: 1 / -1;
+  .party-editor > .inline-heading .text-button,
+  .party-editor > .inline-heading .danger-text-button {
+    width: 80px;
+    min-width: 80px;
   }
 }
