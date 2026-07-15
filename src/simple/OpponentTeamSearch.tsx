@@ -35,7 +35,12 @@ function getSelectedPokemon(value: string, pokedex: PokemonEntry[]): PokemonEntr
 }
 
 function writeTextareaValue(textarea: HTMLTextAreaElement, tokens: string[]): void {
-  textarea.value = tokens.join("、");
+  const value = tokens.join("、");
+  const setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value")?.set;
+
+  if (setter) setter.call(textarea, value);
+  else textarea.value = value;
+
   textarea.dispatchEvent(new Event("input", { bubbles: true }));
   textarea.dispatchEvent(new Event("change", { bubbles: true }));
 }
@@ -131,7 +136,7 @@ export function OpponentTeamSearch() {
   const updateTeam = (tokens: string[]) => {
     if (!textarea) return;
     writeTextareaValue(textarea, tokens);
-    setTeamText(textarea.value);
+    setTeamText(tokens.join("、"));
   };
 
   const addPokemon = (pokemon: PokemonEntry) => {
