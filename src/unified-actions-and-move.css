@@ -1,10 +1,10 @@
 @media (max-width: 640px) {
   .party-editor > .inline-heading .text-button,
   .party-editor > .inline-heading .danger-text-button {
-    width: 72px;
-    min-width: 72px;
-    height: 36px;
-    min-height: 36px;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    min-height: 40px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
