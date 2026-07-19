@@ -37,12 +37,20 @@ export function MobileOpponentRemoveFix() {
   const { pokedex } = usePokedex();
 
   useEffect(() => {
-    let handledPointerButton: HTMLButtonElement | null = null;
-    let clearHandledTimer: number | null = null;
+    let suppressNextRemovalClick = false;
+    let clearSuppressionTimer: number | null = null;
 
     const findRemoveButton = (target: EventTarget | null): HTMLButtonElement | null => {
       if (!(target instanceof Element)) return null;
       return target.closest<HTMLButtonElement>(".opponent-team-chip button");
+    };
+
+    const clearClickSuppression = () => {
+      suppressNextRemovalClick = false;
+      if (clearSuppressionTimer !== null) {
+        window.clearTimeout(clearSuppressionTimer);
+        clearSuppressionTimer = null;
+      }
     };
 
     const removeOnlySelectedPokemon = (button: HTMLButtonElement) => {
@@ -69,29 +77,33 @@ export function MobileOpponentRemoveFix() {
       event.stopPropagation();
       event.stopImmediatePropagation();
 
-      handledPointerButton = button;
+      suppressNextRemovalClick = true;
       removeOnlySelectedPokemon(button);
 
-      if (clearHandledTimer !== null) window.clearTimeout(clearHandledTimer);
-      clearHandledTimer = window.setTimeout(() => {
-        handledPointerButton = null;
-        clearHandledTimer = null;
-      }, 800);
+      if (clearSuppressionTimer !== null) window.clearTimeout(clearSuppressionTimer);
+      clearSuppressionTimer = window.setTimeout(() => {
+        clearClickSuppression();
+      }, 600);
     };
 
     const handleClick = (event: MouseEvent) => {
       const button = findRemoveButton(event.target);
       if (!button) return;
 
-      const isKeyboardClick = event.detail === 0;
-      if (button !== handledPointerButton && !isKeyboardClick) return;
+      if (suppressNextRemovalClick) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        clearClickSuppression();
+        return;
+      }
+
+      if (event.detail !== 0) return;
 
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
-
-      if (isKeyboardClick) removeOnlySelectedPokemon(button);
-      handledPointerButton = null;
+      removeOnlySelectedPokemon(button);
     };
 
     document.addEventListener("pointerdown", handlePointerDown, true);
@@ -100,7 +112,7 @@ export function MobileOpponentRemoveFix() {
     return () => {
       document.removeEventListener("pointerdown", handlePointerDown, true);
       document.removeEventListener("click", handleClick, true);
-      if (clearHandledTimer !== null) window.clearTimeout(clearHandledTimer);
+      if (clearSuppressionTimer !== null) window.clearTimeout(clearSuppressionTimer);
     };
   }, [pokedex]);
 
