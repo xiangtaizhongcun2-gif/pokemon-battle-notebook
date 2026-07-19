@@ -37,15 +37,13 @@ export function MobileOpponentRemoveFix() {
   const { pokedex } = usePokedex();
 
   useEffect(() => {
-    let handledPointerButton: HTMLButtonElement | null = null;
-    let clearHandledTimer: number | null = null;
+    const handleClick = (event: MouseEvent) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
 
-    const findRemoveButton = (target: EventTarget | null): HTMLButtonElement | null => {
-      if (!(target instanceof Element)) return null;
-      return target.closest<HTMLButtonElement>(".opponent-team-chip button");
-    };
+      const button = target.closest<HTMLButtonElement>(".opponent-team-chip button");
+      if (!button) return;
 
-    const removeOnlySelectedPokemon = (button: HTMLButtonElement) => {
       const chip = button.closest<HTMLElement>(".opponent-team-chip");
       const pokemonName = chip?.querySelector("strong")?.textContent?.trim() ?? "";
       const pokemon = pokedex.find((entry) => normalize(entry.name) === normalize(pokemonName));
@@ -53,55 +51,20 @@ export function MobileOpponentRemoveFix() {
 
       if (!pokemon || !textarea) return;
 
-      const remainingTokens = splitTeamText(textarea.value).filter(
-        (token) => !matchesPokemon(pokemon, token),
-      );
+      const currentTokens = splitTeamText(textarea.value);
+      if (currentTokens.length === 0) return;
+
+      const remainingTokens = currentTokens.filter((token) => !matchesPokemon(pokemon, token));
+      if (remainingTokens.length === currentTokens.length) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
       writeTextareaValue(textarea, remainingTokens.join("、"));
     };
 
-    const handlePointerDown = (event: globalThis.PointerEvent) => {
-      if (event.pointerType !== "touch" && event.pointerType !== "pen") return;
-
-      const button = findRemoveButton(event.target);
-      if (!button) return;
-
-      event.preventDefault();
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-
-      handledPointerButton = button;
-      removeOnlySelectedPokemon(button);
-
-      if (clearHandledTimer !== null) window.clearTimeout(clearHandledTimer);
-      clearHandledTimer = window.setTimeout(() => {
-        handledPointerButton = null;
-        clearHandledTimer = null;
-      }, 800);
-    };
-
-    const handleClick = (event: MouseEvent) => {
-      const button = findRemoveButton(event.target);
-      if (!button) return;
-
-      const isKeyboardClick = event.detail === 0;
-      if (button !== handledPointerButton && !isKeyboardClick) return;
-
-      event.preventDefault();
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-
-      if (isKeyboardClick) removeOnlySelectedPokemon(button);
-      handledPointerButton = null;
-    };
-
-    document.addEventListener("pointerdown", handlePointerDown, true);
     document.addEventListener("click", handleClick, true);
-
-    return () => {
-      document.removeEventListener("pointerdown", handlePointerDown, true);
-      document.removeEventListener("click", handleClick, true);
-      if (clearHandledTimer !== null) window.clearTimeout(clearHandledTimer);
-    };
+    return () => document.removeEventListener("click", handleClick, true);
   }, [pokedex]);
 
   return null;
