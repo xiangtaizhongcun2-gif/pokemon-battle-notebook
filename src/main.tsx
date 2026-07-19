@@ -22,6 +22,7 @@ import "./unified-actions-and-move.css";
 import { BattleStatistics } from "./simple/BattleStatistics";
 import { OpponentTeamSearch } from "./simple/OpponentTeamSearch";
 import { BattleLogResetSync } from "./simple/BattleLogResetSync";
+import { MobileOpponentRemoveFix } from "./simple/MobileOpponentRemoveFix";
 import { DataBackupManager } from "./simple/DataBackupManager";
 import { PartyCopyAction } from "./simple/PartyCopyAction";
 import { SpeedComparison } from "./simple/SpeedComparison";
@@ -56,6 +57,7 @@ createRoot(rootElement).render(
     <OwnSelectionPicker />
     <OpponentTeamSearch />
     <BattleLogResetSync />
+    <MobileOpponentRemoveFix />
     <BattleStatistics />
     <OpponentPokemonStatisticsMount />
     <SelectionStatistics />
